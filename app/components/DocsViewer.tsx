@@ -128,7 +128,7 @@ export function DocsViewer() {
                   : "bg-cyan-50 text-cyan-700 border-cyan-200"
               }`}
             >
-              v1.1.0
+              v1.1.1
             </span>
           </div>
 
