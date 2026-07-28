@@ -41,7 +41,11 @@ export const DOCS_NAVIGATION = [
     category: "Core Concepts",
     items: [
       { id: "file-routing", title: "File-Based Routing" },
-      { id: "singletons-helpers", title: "Singletons & Built-in Helpers", badge: "KEY" },
+      {
+        id: "singletons-helpers",
+        title: "Singletons & Built-in Helpers",
+        badge: "KEY",
+      },
       { id: "view-companion", title: "View Companions (props)" },
       { id: "template-engines", title: "Template Engines (HBS, EJS, HTML)" },
       { id: "layouts-components", title: "Layouts & Components" },
@@ -114,8 +118,18 @@ const app = nxpress({
     siteName: "My Nxpress Portal",
   },
 });
+app.listen(3000, () => {
+  console.log("Server listening at http://localhost:3000");
+});
 
-serve({ port: 3000 });`,
+// or just
+serve({ 
+  port: 3000, 
+  engine: "hbs",
+  globals: {
+    siteName: "My Nxpress Portal",
+  }, 
+});`,
         },
       ],
       callouts: [
@@ -200,8 +214,14 @@ pnpm dev`,
     description:
       "Understand the 3 primary ways to initialize and start an Nxpress application.",
     subsections: [
-      { id: "method-serve", title: "Method 1: Automatic serve(options) Helper" },
-      { id: "method-nxpress", title: "Method 2: Custom Express Instance nxpress(options)" },
+      {
+        id: "method-serve",
+        title: "Method 1: Automatic serve(options) Helper",
+      },
+      {
+        id: "method-nxpress",
+        title: "Method 2: Custom Express Instance nxpress(options)",
+      },
       { id: "method-cli", title: "Method 3: CLI Commands (nxpress / nxp)" },
     ],
     content: {
@@ -287,9 +307,15 @@ npx nxpress start`,
     badge: "KEY",
     subsections: [
       { id: "system-singletons", title: "System Singletons (R, G, E)" },
-      { id: "injected-defaults", title: "Injected Default Variables (year, now, tailwind)" },
+      {
+        id: "injected-defaults",
+        title: "Injected Default Variables (year, now, tailwind)",
+      },
       { id: "component-helper", title: "The Component Helper ($)" },
-      { id: "builtin-helpers-list", title: "Complete Built-in Utility Helpers List" },
+      {
+        id: "builtin-helpers-list",
+        title: "Complete Built-in Utility Helpers List",
+      },
     ],
     content: {
       overview:
@@ -484,7 +510,10 @@ export async function POST(req: Request, res: Response) {
     subsections: [
       { id: "props-function", title: "The `props()` Export" },
       { id: "locals-merging", title: "Locals & Globals Merging" },
-      { id: "built-in-singletons", title: "Built-in System Singletons (R, G, E)" },
+      {
+        id: "built-in-singletons",
+        title: "Built-in System Singletons (R, G, E)",
+      },
     ],
     content: {
       overview:
@@ -602,7 +631,10 @@ export async function props(req: Request, res: Response) {
     subsections: [
       { id: "root-layout", title: "Root Layout (`layout.hbs`)" },
       { id: "nested-layouts", title: "Nested Subdirectory Layouts" },
-      { id: "components-helper", title: "Template Helper Components `{{$ \"name\"}}`" },
+      {
+        id: "components-helper",
+        title: 'Template Helper Components `{{$ "name"}}`',
+      },
     ],
     content: {
       overview:
@@ -741,12 +773,14 @@ export async function props(req: Request, res: Response) {
     id: "custom-errors",
     category: "Guides & Use Cases",
     title: "Custom 404 & 500 Pages",
-    description:
-      "Create branded error pages with default fallback titles.",
+    description: "Create branded error pages with default fallback titles.",
     subsections: [
       { id: "custom-404", title: "Creating `app/404.hbs`" },
       { id: "custom-500", title: "Creating `app/500.hbs`" },
-      { id: "default-title-props", title: "Default `title` Fallbacks ('404' & '500')" },
+      {
+        id: "default-title-props",
+        title: "Default `title` Fallbacks ('404' & '500')",
+      },
     ],
     content: {
       overview:
@@ -786,9 +820,15 @@ export async function props(req: Request, res: Response) {
     description:
       "Define global variables available in all view templates across your application.",
     subsections: [
-      { id: "config-globals", title: "Configuring Globals in nxpress.config.js" },
+      {
+        id: "config-globals",
+        title: "Configuring Globals in nxpress.config.js",
+      },
       { id: "direct-naming", title: "Direct Naming Access" },
-      { id: "view-overrides", title: "Overriding Globals in View Companion `props()`" },
+      {
+        id: "view-overrides",
+        title: "Overriding Globals in View Companion `props()`",
+      },
     ],
     content: {
       overview:
@@ -820,7 +860,10 @@ export async function props(req: Request, res: Response) {
       "Deploy Nxpress applications safely in production environments.",
     subsections: [
       { id: "cli-start", title: "Running `nxpress start`" },
-      { id: "environment-vars", title: "Environment Variables (`isDev = false`)" },
+      {
+        id: "environment-vars",
+        title: "Environment Variables (`isDev = false`)",
+      },
       { id: "docker-setup", title: "Containerizing with Docker" },
     ],
     content: {
