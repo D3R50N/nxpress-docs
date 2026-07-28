@@ -196,46 +196,83 @@ pnpm dev`,
   installation: {
     id: "installation",
     category: "Getting Started",
-    title: "Manual Installation",
+    title: "Server Initialization Methods",
     description:
-      "Add `@nxpress/core` to an existing Node.js or Express project manually.",
+      "Understand the 3 primary ways to initialize and start an Nxpress application.",
     subsections: [
-      { id: "install-deps", title: "Installing Dependencies" },
-      { id: "tsconfig-setup", title: "TypeScript Configuration" },
-      { id: "express-integration", title: "Express Integration" },
+      { id: "method-serve", title: "Method 1: Automatic serve(options) Helper" },
+      { id: "method-nxpress", title: "Method 2: Custom Express Instance nxpress(options)" },
+      { id: "method-cli", title: "Method 3: CLI Commands (nxpress / nxp)" },
     ],
     content: {
       overview:
-        "You can integrate `@nxpress/core` into any Node.js project or existing Express server. Because Nxpress produces standard Express app instances, it is 100% compatible with existing Express middleware (e.g. `cors`, `helmet`, `cookie-parser`).",
-      codeSnippets: [
+        "Nxpress offers 3 flexible ways to initialize and run your application depending on your workflow: using the one-liner `serve()` helper, attaching custom middleware via `nxpress()`, or using the built-in CLI (`nxpress` / `nxp`).",
+      highlights: [
         {
-          title: "Install Package",
-          language: "bash",
-          code: `pnpm add @nxpress/core express
-pnpm add -D typescript @types/node @types/express tsx`,
+          title: "Method 1: serve(options)",
+          desc: "One-liner helper that initializes Nxpress and starts listening immediately without declaring `app` first.",
         },
         {
-          title: "Mounting on Existing Express App",
+          title: "Method 2: nxpress(options)",
+          desc: "Returns a standard Express `app` instance so you can attach custom middleware (`cors`, `helmet`, `session`) before calling `app.listen(port)`.",
+        },
+        {
+          title: "Method 3: CLI Commands",
+          desc: "Use `nxpress dev` (or `nxp dev`) for development with SSE live reload, and `nxpress start` (or `nxp start`) for production.",
+        },
+      ],
+      codeSnippets: [
+        {
+          title: "Method 1: One-Liner serve() Helper",
           language: "typescript",
           filename: "server.ts",
-          code: `import express from "express";
-import { nxpress } from "@nxpress/core";
-import cors from "cors";
+          code: `import { serve } from "@nxpress/core";
 
-const app = express();
-app.use(cors());
-
-// Mount Nxpress views & router
-const nxApp = nxpress({
-  rootDir: __dirname,
+// Automatically creates Express app & starts listening on port 3000
+serve({
+  port: 3000,
   engine: "hbs",
+  globals: {
+    siteName: "My Nxpress App",
+  },
+});`,
+        },
+        {
+          title: "Method 2: Custom Express Instance with Custom Middleware",
+          language: "typescript",
+          filename: "server.ts",
+          code: `import { nxpress } from "@nxpress/core";
+import cors from "cors";
+import helmet from "helmet";
+
+// Create custom Express app instance
+const app = nxpress({
+  engine: "hbs",
+  globals: { siteName: "My Portal" },
 });
 
-app.use(nxApp);
+// Attach standard Express middleware
+app.use(cors());
+app.use(helmet());
 
+// Manually start HTTP server
 app.listen(3000, () => {
   console.log("Server listening at http://localhost:3000");
 });`,
+        },
+        {
+          title: "Method 3: CLI Commands (nxpress / nxp)",
+          language: "bash",
+          filename: "Terminal",
+          code: `# Development mode (with SSE Live Reload & hot cache invalidation)
+pnpm nxp dev
+# or using npx
+npx nxpress dev
+
+# Production server mode (automatically sets isDev = false)
+pnpm nxp start
+# or using npx
+npx nxpress start`,
         },
       ],
     },
