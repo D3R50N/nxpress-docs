@@ -47,7 +47,7 @@ export const DOCS_NAVIGATION = [
         badge: "KEY",
       },
       { id: "view-companion", title: "View Companions (props)" },
-      { id: "template-engines", title: "Template Engines (HBS, EJS, HTML)" },
+      { id: "template-engines", title: "Template Engines (EJS, HBS, HTML)" },
       { id: "layouts-components", title: "Layouts & Components" },
     ],
   },
@@ -85,11 +85,11 @@ export const DOCS_DATA: Record<string, DocSection> = {
     ],
     content: {
       overview:
-        "Standard Express applications often require repetitive route definitions, complex view rendering boilerplate, and manual browser refreshes. Nxpress bridges the gap by delivering a Next.js-like developer experience using classical, battle-tested server HTML templates (Handlebars, EJS, or raw HTML).",
+        "Standard Express applications often require repetitive route definitions, complex view rendering boilerplate, and manual browser refreshes. Nxpress bridges the gap by delivering a Next.js-like developer experience using classical, battle-tested server HTML templates (EJS, Handlebars, or raw HTML).",
       highlights: [
         {
           title: "File-Based Directory Routing",
-          desc: "Drop Handlebars, EJS, or HTML files into your `app/` directory. Routes map automatically to files.",
+          desc: "Drop EJS, Handlebars, or HTML files into your `app/` directory. Routes map automatically to files.",
         },
         {
           title: "Built-in System Singletons (R, G, E)",
@@ -113,7 +113,7 @@ export const DOCS_DATA: Record<string, DocSection> = {
 
 // Create and start an Nxpress app
 const app = nxpress({
-  engine: "hbs", // 'hbs' | 'ejs' | 'html'
+  engine: "ejs", // 'ejs' | 'hbs' | 'html'
   globals: {
     siteName: "My Nxpress Portal",
   },
@@ -125,7 +125,7 @@ app.listen(3000, () => {
 // or just
 serve({ 
   port: 3000, 
-  engine: "hbs",
+  engine: "ejs",
   globals: {
     siteName: "My Nxpress Portal",
   }, 
@@ -173,15 +173,15 @@ npx create-nxpress-app my-nxpress-app`,
           filename: "Directory Tree",
           code: `my-nxpress-app/
 ├── app/
-│   ├── layout.hbs        # Root layout wrapper
-│   ├── index.hbs         # Home page (GET /)
+│   ├── layout.ejs        # Root layout wrapper
+│   ├── index.ejs         # Home page (GET /)
 │   ├── index.ts          # Server companion logic (props)
-│   ├── about.hbs         # About page (GET /about)
-│   ├── 404.hbs           # Custom 404 error view
-│   └── 500.hbs           # Custom 500 error view
+│   ├── about.ejs         # About page (GET /about)
+│   ├── 404.ejs           # Custom 404 error view
+│   └── 500.ejs           # Custom 500 error view
 ├── components/
-│   ├── navbar.hbs        # Reusable navbar component
-│   └── footer.hbs        # Reusable footer component
+│   ├── navbar.ejs        # Reusable navbar component
+│   └── footer.ejs        # Reusable footer component
 ├── public/
 │   └── logo.png          # Static assets
 ├── app.css               # Tailwind CSS entrypoint
@@ -251,7 +251,7 @@ pnpm dev`,
 // Automatically creates Express app & starts listening on port 3000
 serve({
   port: 3000,
-  engine: "hbs",
+  engine: "ejs",
   globals: {
     siteName: "My Nxpress App",
   },
@@ -267,7 +267,7 @@ import helmet from "helmet";
 
 // Create custom Express app instance
 const app = nxpress({
-  engine: "hbs",
+  engine: "ejs",
   globals: { siteName: "My Portal" },
 });
 
@@ -429,11 +429,11 @@ npx nxpress start`,
         "Nxpress uses a file-based routing system similar to Next.js. Every file in your `app/` directory automatically becomes an accessible URL endpoint based on its relative path.",
       highlights: [
         {
-          title: "index.hbs / index.ejs",
+          title: "index.ejs / index.hbs",
           desc: "Maps to the root of its folder (`/` or `/dashboard`).",
         },
         {
-          title: "[id].hbs",
+          title: "[id].ejs",
           desc: "Captures dynamic parameters accessible via `R.params.id` or `req.params.id` in server companion logic.",
         },
         {
@@ -504,7 +504,7 @@ export async function POST(req: Request, res: Response) {
     ],
     content: {
       overview:
-        "Every view file (e.g. `app/dashboard.hbs`) can be paired with an optional companion TypeScript file (`app/dashboard.ts`). Exporting a `props(req, res)` function allows you to execute asynchronous server queries before rendering.",
+        "Every view file (e.g. `app/dashboard.ejs`) can be paired with an optional companion TypeScript file (`app/dashboard.ts`). Exporting a `props(req, res)` function allows you to execute asynchronous server queries before rendering.",
       codeSnippets: [
         {
           title: "View Companion TypeScript File",
@@ -527,20 +527,20 @@ export async function props(req: Request, res: Response) {
         },
         {
           title: "Consuming Props in View Template",
-          language: "handlebars",
-          filename: "app/dashboard.hbs",
-          code: `{{!-- Access props directly by name --}}
+          language: "ejs",
+          filename: "app/dashboard.ejs",
+          code: `<%# Access props directly by name %>
 <div class="dashboard">
-  <h1>{{title}}</h1>
-  <p>Welcome back, {{user.name}}!</p>
+  <h1><%= title %></h1>
+  <p>Welcome back, <%= user.name %>!</p>
 
   <div class="grid font-mono">
-    <span>Total Users: {{stats.totalUsers}}</span>
-    <span>Active: {{stats.activeSessions}}</span>
+    <span>Total Users: <%= stats.totalUsers %></span>
+    <span>Active: <%= stats.activeSessions %></span>
   </div>
 
-  {{!-- System request singleton 'R' --}}
-  <p>Your IP: {{R.ip}} | Path: {{R.path}}</p>
+  <%# System request singleton 'R' %>
+  <p>Your IP: <%= R.ip %> | Path: <%= R.path %></p>
 </div>`,
         },
       ],
@@ -648,50 +648,50 @@ export async function props(req: Request, res: Response) {
     description:
       "Wrap views with nested layout templates and reuse modular UI components.",
     subsections: [
-      { id: "root-layout", title: "Root Layout (`layout.hbs`)" },
+      { id: "root-layout", title: "Root Layout (`layout.ejs`)" },
       { id: "nested-layouts", title: "Nested Subdirectory Layouts" },
       {
         id: "components-helper",
-        title: 'Template Helper Components `{{$ "name"}}`',
+        title: 'Template Helper Components `<%- $ "name" %>`',
       },
     ],
     content: {
       overview:
-        "Layout files wrap page views automatically. Any `layout.hbs` placed in `app/` wraps all child pages. You can place nested layouts in subdirectories (e.g. `app/admin/layout.hbs`) for hierarchical page wrapping.",
+        "Layout files wrap page views automatically. Any `layout.ejs` placed in `app/` wraps all child pages. You can place nested layouts in subdirectories (e.g. `app/admin/layout.ejs`) for hierarchical page wrapping.",
       codeSnippets: [
         {
           title: "Root Layout Wrapper",
-          language: "handlebars",
-          filename: "app/layout.hbs",
+          language: "ejs",
+          filename: "app/layout.ejs",
           code: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="{{description}}">
-  <title>{{#if title}}{{title}} - {{/if}}{{G.siteName}}</title>
-  {{{tailwind}}}
+  <meta name="description" content="<%= description %>">
+  <title><% if (typeof title !== 'undefined' && title) { %><%= title %> - <% } %><%= G.siteName %></title>
+  <%- tailwind %>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen">
-  {{!-- Render component helper --}}
-  {{{$ "navbar" active="home"}}}
+  <%# Render component helper %>
+  <%- $ "navbar" active="home" %>
 
   <main class="container mx-auto p-6">
-    {{{body}}}
+    <%- body %>
   </main>
 
-  {{{$ "footer"}}}
+  <%- $ "footer" %>
 </body>
 </html>`,
         },
         {
           title: "Reusable Component Template",
-          language: "handlebars",
-          filename: "components/navbar.hbs",
+          language: "ejs",
+          filename: "components/navbar.ejs",
           code: `<header class="border-b border-slate-800 p-4 flex justify-between">
-  <a href="/" class="font-bold text-cyan-400">{{G.siteName}}</a>
+  <a href="/" class="font-bold text-cyan-400"><%= G.siteName %></a>
   <nav class="flex gap-4">
-    <a href="/" class="{{#if (eq active 'home')}}text-cyan-400{{/if}}">Home</a>
+    <a href="/" class="<%= active === 'home' ? 'text-cyan-400' : '' %>">Home</a>
     <a href="/about">About</a>
   </nav>
 </header>`,
@@ -794,8 +794,8 @@ export async function props(req: Request, res: Response) {
     title: "Custom 404 & 500 Pages",
     description: "Create branded error pages with default fallback titles.",
     subsections: [
-      { id: "custom-404", title: "Creating `app/404.hbs`" },
-      { id: "custom-500", title: "Creating `app/500.hbs`" },
+      { id: "custom-404", title: "Creating `app/404.ejs`" },
+      { id: "custom-500", title: "Creating `app/500.ejs`" },
       {
         id: "default-title-props",
         title: "Default `title` Fallbacks ('404' & '500')",
@@ -803,12 +803,12 @@ export async function props(req: Request, res: Response) {
     ],
     content: {
       overview:
-        "Creating custom error pages is as simple as adding `404.hbs` or `500.hbs` to your `app/` directory. Nxpress automatically passes default `title` props ('404' and '500') so your root layout handles error titles seamlessly.",
+        "Creating custom error pages is as simple as adding `404.ejs` or `500.ejs` to your `app/` directory. Nxpress automatically passes default `title` props ('404' and '500') so your root layout handles error titles seamlessly.",
       codeSnippets: [
         {
           title: "Custom 404 Error View",
-          language: "handlebars",
-          filename: "app/404.hbs",
+          language: "ejs",
+          filename: "app/404.ejs",
           code: `<div class="text-center py-20">
   <h1 class="text-9xl font-black text-cyan-400">404</h1>
   <h2 class="text-2xl font-semibold mt-4">Page Not Found</h2>
@@ -818,12 +818,12 @@ export async function props(req: Request, res: Response) {
         },
         {
           title: "Custom 500 Error View",
-          language: "handlebars",
-          filename: "app/500.hbs",
+          language: "ejs",
+          filename: "app/500.ejs",
           code: `<div class="text-center py-20">
   <h1 class="text-9xl font-black text-red-400">500</h1>
   <h2 class="text-2xl font-semibold mt-4">Internal Server Error</h2>
-  <p class="text-slate-400 mt-2">{{error}}</p>
+  <p class="text-slate-400 mt-2"><%= error %></p>
   <a href="/" class="inline-block mt-6 px-6 py-3 bg-slate-800 text-slate-100 rounded-lg">Back to Home</a>
 </div>`,
         },
@@ -858,7 +858,7 @@ export async function props(req: Request, res: Response) {
           language: "javascript",
           filename: "nxpress.config.js",
           code: `module.exports = {
-  engine: "hbs",
+  engine: "ejs",
   port: 3000,
   globals: {
     siteName: "Nxpress Framework",

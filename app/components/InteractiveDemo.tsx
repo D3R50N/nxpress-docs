@@ -26,7 +26,7 @@ export function InteractiveDemo({ demoType, isDarkMode = true }: Props) {
     setIsSimulatingEdit(true);
     const now = new Date().toLocaleTimeString();
     setReloadLog((prev) => [
-      `[${now}] File changed: app/index.hbs`,
+      `[${now}] File changed: app/index.ejs`,
       `[${now}] Tailwind CSS compiled (12ms)`,
       `[${now}] SSE broadcast -> 'data: reload'`,
       `[${now}] Browser reloaded page (8ms)`,
@@ -86,9 +86,9 @@ export function InteractiveDemo({ demoType, isDarkMode = true }: Props) {
 
           <div className="flex flex-wrap gap-2">
             {[
-              { path: "/", file: "app/index.hbs" },
-              { path: "/about", file: "app/about.hbs" },
-              { path: "/users/42", file: "app/users/[id].hbs" },
+              { path: "/", file: "app/index.ejs" },
+              { path: "/about", file: "app/about.ejs" },
+              { path: "/users/42", file: "app/users/[id].ejs" },
               { path: "/api/users", file: "app/api/users.ts" },
             ].map((item) => (
               <button
@@ -134,9 +134,9 @@ export function InteractiveDemo({ demoType, isDarkMode = true }: Props) {
                   isDarkMode ? "text-[#02FAFC]" : "text-cyan-700"
                 }`}
               >
-                {selectedRoute === "/" && "app/index.hbs"}
-                {selectedRoute === "/about" && "app/about.hbs"}
-                {selectedRoute === "/users/42" && "app/users/[id].hbs"}
+                {selectedRoute === "/" && "app/index.ejs"}
+                {selectedRoute === "/about" && "app/about.ejs"}
+                {selectedRoute === "/users/42" && "app/users/[id].ejs"}
                 {selectedRoute === "/api/users" && "app/api/users.ts (REST JSON)"}
               </div>
             </div>
@@ -374,7 +374,7 @@ export function InteractiveDemo({ demoType, isDarkMode = true }: Props) {
                   isDarkMode ? "text-[#02FAFC]" : "text-cyan-700"
                 }
               >
-                app/{errorType}.hbs
+                app/{errorType}.ejs
               </span>
             </div>
           </div>
