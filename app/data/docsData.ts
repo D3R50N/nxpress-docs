@@ -40,6 +40,7 @@ export const DOCS_NAVIGATION = [
   {
     category: "Core Concepts",
     items: [
+      
       { id: "file-routing", title: "File-Based Routing" },
       {
         id: "singletons-helpers",
@@ -331,7 +332,7 @@ npx nxpress start`,
         },
         {
           title: "E / env Singleton",
-          desc: "Direct access to `process.env` secrets and environment flags (`E.NODE_ENV`, `E.PORT`).",
+          desc: "Direct access to process environment flags (`E.NODE_ENV`, `E.PUBLIC_API_URL`). By default (`secureEnv: true`), only variables starting with `PUBLIC_` and `NODE_ENV` are exposed to views for security.",
         },
         {
           title: "Built-in Utility Helpers",
@@ -860,6 +861,7 @@ export async function props(req: Request, res: Response) {
           code: `module.exports = {
   engine: "ejs",
   port: 3000,
+  secureEnv: true,
   globals: {
     siteName: "Nxpress Framework",
     description: "The lightweight Next.js-like framework for Node.js Express.",
