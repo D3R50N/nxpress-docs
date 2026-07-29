@@ -77,7 +77,7 @@ export const DOCS_DATA: Record<string, DocSection> = {
     title: "Introduction to Nxpress",
     description:
       "Nxpress is a lightweight, Next.js-inspired web framework for Node.js built on top of Express. It brings file-based routing, template components, server companion logic, and SSE live reload to standard Express apps.",
-    badge: "v1.1.1",
+    badge: "v1.1.3",
     subsections: [
       { id: "why-nxpress", title: "Why Nxpress?" },
       { id: "key-features", title: "Key Features" },
@@ -498,6 +498,14 @@ export async function POST(req: Request, res: Response) {
         },
       ],
       demoType: "routing",
+      callouts: [
+        {
+          type: "note",
+          title: "Strict Engine Extension Filtering",
+          message:
+            "Nxpress strictly scans and registers only template files matching the configured server engine extension (e.g. `.ejs` for EJS, `.hbs` for Handlebars, etc.), plus `.ts`/`.js` companions and API routes. Template files matching other engines in `app/` are automatically ignored to eliminate route conflicts.",
+        },
+      ],
     },
   },
 
@@ -574,16 +582,28 @@ export async function props(req: Request, res: Response) {
     category: "Core Concepts",
     title: "Template Engines",
     description:
-      "Choose between Handlebars, EJS, or Vanilla HTML depending on your project needs.",
+      "Nxpress supports EJS (powered by Eta, default), Handlebars, Nunjucks, LiquidJS, and Vanilla HTML.",
     subsections: [
+      { id: "ejs", title: "EJS (.ejs) - Powered by Eta (Default)" },
       { id: "handlebars", title: "Handlebars (.hbs)" },
-      { id: "ejs", title: "EJS (.ejs)" },
+      { id: "nunjucks", title: "Nunjucks (.njk)" },
+      { id: "liquid", title: "LiquidJS (.liquid)" },
       { id: "raw-html", title: "Vanilla HTML (.html)" },
     ],
     content: {
       overview:
-        "Nxpress natively supports three template engines. You configure your choice in `nxpress.config.js` or via the `engine` option.",
+        "Nxpress supports 5 template engines. `.ejs` templates are compiled out of the box using the ultra-fast Eta engine under the hood. Full support is also included for Handlebars, Nunjucks, LiquidJS, and Vanilla HTML.",
       codeSnippets: [
+        {
+          title: "EJS (Eta Engine) Example (Default)",
+          language: "ejs",
+          filename: "app/index.ejs",
+          code: `<h1><%= title %></h1>
+<% if (!E.NODE_ENV || E.NODE_ENV !== 'production') { %>
+  <span class="badge">Development Mode</span>
+<% } %>
+<p><%= description %></p>`,
+        },
         {
           title: "Handlebars Example",
           language: "handlebars",
@@ -603,6 +623,26 @@ export async function props(req: Request, res: Response) {
   <span class="badge">Development Mode</span>
 <% } %>
 <p><%= description %></p>`,
+        },
+        {
+          title: "Nunjucks Example",
+          language: "html",
+          filename: "app/index.njk",
+          code: `<h1>{{ title }}</h1>
+{% if isDev %}
+  <span class="badge">Development Mode</span>
+{% endif %}
+<p>{{ description }}</p>`,
+        },
+        {
+          title: "LiquidJS Example",
+          language: "html",
+          filename: "app/index.liquid",
+          code: `<h1>{{ title }}</h1>
+{% if isDev %}
+  <span class="badge">Development Mode</span>
+{% endif %}
+<p>{{ description }}</p>`,
         },
         {
           title: "Vanilla HTML Example",
