@@ -78,7 +78,7 @@ export const DOCS_DATA: Record<string, DocSection> = {
     title: "Introduction to Nxpress",
     description:
       "Nxpress is a lightweight, Next.js-inspired web framework for Node.js built on top of Express. It brings file-based routing, template components, server companion logic, and SSE live reload to standard Express apps.",
-    badge: "v1.1.4",
+    badge: "v1.1.5",
     subsections: [
       { id: "why-nxpress", title: "Why Nxpress?" },
       { id: "key-features", title: "Key Features" },
