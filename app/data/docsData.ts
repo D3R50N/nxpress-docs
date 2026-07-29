@@ -340,78 +340,57 @@ npx nxpress start`,
       ],
       codeSnippets: [
         {
-          title: "Consuming Built-in Utility Helpers in Templates",
-          language: "handlebars",
-          filename: "app/users.hbs",
-          code: `{{!-- String & Text Formatting Helpers --}}
-<h1>{{capitalize user.name}}</h1>
-<p>{{truncate user.bio 60}}</p>
-<p>Email (lowercase): {{lower user.email}}</p>
+          title: "Consuming Built-in Helpers in EJS (Eta)",
+          language: "ejs",
+          filename: "app/users.ejs",
+          code: `<%-- String & Text Formatting Helpers --%>
+<h1><%= capitalize(user.name) %></h1>
+<p><%= truncate(user.bio, 60) %></p>
+<p>Email (lowercase): <%= lower(user.email) %></p>
 
-{{!-- Comparison & Logic Helpers --}}
-{{#if (eq user.role "admin")}}
+<%-- Comparison & Logic Helpers --%>
+<% if (eq(user.role, "admin")) { %>
   <span class="badge font-bold">Administrator</span>
-{{/if}}
+<% } %>
 
-{{#if (and user.isVerified (gt user.score 50))}}
+<% if (and(user.isVerified, gt(user.score, 50))) { %>
   <span class="badge text-emerald-400">Featured Creator</span>
-{{/if}}
+<% } %>
 
-<p>Status: {{ternary user.isOnline "Active Now" "Offline"}}</p>
+<p>Status: <%= ternary(user.isOnline, "Active Now", "Offline") %></p>
 
-{{!-- Collections & Array Helpers --}}
-<p>Interests: {{join user.interests ", "}}</p>
-<p>Total Badges: {{len user.badges}}</p>
-<p>Has VIP: {{contains user.badges "vip"}}</p>
+<%-- Collections & Array Helpers --%>
+<p>Interests: <%= join(user.interests, ", ") %></p>
+<p>Total Badges: <%= len(user.badges) %></p>
+<p>Has VIP: <%= contains(user.badges, "vip") %></p>
 
-{{!-- Math Helpers --}}
-<p>Next Year Score: {{add user.score 10}}</p>`,
+<%-- Math Helpers --%>
+<p>Next Year Score: <%= add(user.score, 10) %></p>`,
         },
         {
-          title: "Singletons & Component Helper ($) in Layout",
-          language: "handlebars",
-          filename: "app/layout.hbs",
+          title: "Singletons & Component Helper ($) in EJS Layout",
+          language: "ejs",
+          filename: "app/layout.ejs",
           code: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>{{#if title}}{{title}} - {{/if}}{{G.siteName}}</title>
+  <title><%= typeof title !== 'undefined' ? title + ' - ' : '' %><%= G.siteName %></title>
   
-  {{!-- Injected CSS Link --}}
-  {{{tailwind}}}
+  <%-- Injected CSS Link --%>
+  <%- tailwind %>
 </head>
 <body class="bg-slate-950 text-slate-100">
-  {{!-- Render navbar component with helper --}}
-  {{{$ "navbar" active="home"}}}
+  <%-- Render navbar component with helper --%>
+  <%- $("navbar", { active: "home" }) %>
 
   <main>
-    {{{body}}}
+    <%- body %>
   </main>
 
   <footer class="border-t border-slate-800 p-4 text-xs text-slate-400">
-    {{!-- Injected 'year' & 'E' environment singleton --}}
-    <p>&copy; {{year}} {{G.siteName}}. Env: {{E.NODE_ENV}} | Path: {{R.path}}</p>
-  </footer>
-</body>
-</html>`,
-        },
-        {
-          title: "EJS Engine Usage with Singletons & Helpers",
-          language: "ejs",
-          filename: "app/layout.ejs",
-          code: `<!DOCTYPE html>
-<html>
-<head>
-  <title><%= typeof title !== 'undefined' ? title + ' - ' : '' %><%= G.siteName %></title>
-  <%- tailwind %>
-</head>
-<body>
-  <%- $("navbar", { active: "home" }) %>
-
-  <main><%- body %></main>
-
-  <footer>
-    <p>&copy; <%= year %> <%= G.siteName %> | Request Path: <%= R.path %></p>
+    <%-- Injected 'year' & 'E' environment singleton --%>
+    <p>&copy; <%= year %> <%= G.siteName %>. Env: <%= E.NODE_ENV %> | Path: <%= R.path %></p>
   </footer>
 </body>
 </html>`,
