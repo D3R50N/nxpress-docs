@@ -9,7 +9,7 @@ import { DOCS_DATA } from "@/app/docs-content";
 import { Terminal, Shield, FileCode, ChevronRight, Layers, ArrowUp, Code2, ExternalLink } from "lucide-react";
 
 export default function HomePage() {
-  const [activeSectionId, setActiveSectionId] = useState("overview-cli");
+  const [activeSectionId, setActiveSectionId] = useState("");
   const [activeSubId, setActiveSubId] = useState<string | undefined>("starting-server");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
