@@ -46,15 +46,15 @@ export function CodeBlock({ title, language = "typescript", code }: CodeBlockPro
   };
 
   return (
-    <div className="my-4 rounded-lg border border-[var(--border-color)] bg-[var(--bg-code)] overflow-hidden font-mono text-sm shadow-xs">
+    <div className="my-4 rounded-lg border border-(--border-color) bg-(--bg-code) overflow-hidden font-mono text-sm shadow-xs">
       {(title || language) && (
-        <div className="flex items-center justify-between px-4 py-2 border-b border-[var(--border-color)] bg-[var(--bg-secondary)] text-[var(--text-muted)] text-xs">
-          <span className="font-semibold uppercase tracking-wider text-[var(--text-secondary)] font-mono">
+        <div className="flex items-center justify-between px-4 py-2 border-b border-(--border-color) bg-(--bg-secondary) text-(--text-muted) text-xs">
+          <span className="font-semibold uppercase tracking-wider text-(--text-secondary) font-mono">
             {title || language}
           </span>
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded border border-[var(--border-color)] bg-[var(--bg-primary)] text-[var(--text-primary)] hover:bg-[var(--bg-card)] transition-colors cursor-pointer text-xs"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded border border-(--border-color) bg-(--bg-primary) text-(--text-primary) hover:bg-(--bg-card) transition-colors cursor-pointer text-xs"
             aria-label="Copy code"
           >
             {copied ? (
@@ -75,7 +75,7 @@ export function CodeBlock({ title, language = "typescript", code }: CodeBlockPro
         {!title && !language && (
           <button
             onClick={handleCopy}
-            className="absolute top-2 right-2 z-10 flex items-center gap-1 px-2 py-1 rounded border border-[var(--border-color)] bg-[var(--bg-primary)] text-[var(--text-primary)] hover:bg-[var(--bg-card)] transition-colors cursor-pointer text-xs"
+            className="absolute top-2 right-2 z-10 flex items-center gap-1 px-2 py-1 rounded border border-(--border-color) bg-(--bg-primary) text-(--text-primary) hover:bg-(--bg-card) transition-colors cursor-pointer text-xs"
             aria-label="Copy code"
           >
             {copied ? (

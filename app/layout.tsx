@@ -53,7 +53,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)]">
+      <body className="min-h-full flex flex-col bg-(--bg-primary) text-(--text-primary)">
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

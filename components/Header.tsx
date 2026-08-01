@@ -15,19 +15,19 @@ export function Header({ onOpenSearch, isMobileMenuOpen, onToggleMobileMenu }: H
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-[var(--border-color)] bg-[var(--bg-primary)]/90 backdrop-blur-md">
+    <header className="sticky top-0 z-40 w-full border-b border-(--border-color) bg-(--bg-primary)/90 backdrop-blur-md">
       <div className="flex h-16 items-center justify-between px-4 md:px-8">
         {/* Left: Brand Logo & Title */}
         <div className="flex items-center gap-3">
           <button
             onClick={onToggleMobileMenu}
-            className="md:hidden p-2 rounded-md border border-[var(--border-color)] text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]"
+            className="md:hidden p-2 rounded-md border border-(--border-color) text-(--text-primary) hover:bg-(--bg-secondary)"
             aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
 
-          <a href="#" className="flex items-center gap-2.5 font-bold tracking-tight text-[var(--text-primary)]">
+          <a href="#" className="flex items-center gap-2.5 font-bold tracking-tight text-(--text-primary)">
             <Image
               src="/logo.svg"
               alt="Nxpress Logo"
@@ -37,7 +37,7 @@ export function Header({ onOpenSearch, isMobileMenuOpen, onToggleMobileMenu }: H
               priority
             />
             <span className="text-lg font-bold">Nxpress</span>
-            <span className="hidden sm:inline-block text-xs font-mono px-2 py-0.5 rounded border border-[var(--border-color)] bg-[var(--bg-secondary)] text-[var(--text-muted)]">
+            <span className="hidden sm:inline-block text-xs font-mono px-2 py-0.5 rounded border border-(--border-color) bg-(--bg-secondary) text-(--text-muted)">
               v1.2.1
             </span>
           </a>
@@ -48,12 +48,12 @@ export function Header({ onOpenSearch, isMobileMenuOpen, onToggleMobileMenu }: H
           {/* Search Trigger Button */}
           <button
             onClick={onOpenSearch}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-[var(--text-muted)] transition-all cursor-pointer text-xs sm:text-sm"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-(--border-color) bg-(--bg-secondary) text-(--text-muted) hover:text-(--text-primary) hover:border-(--text-muted) transition-all cursor-pointer text-xs sm:text-sm"
           >
             <Search className="w-4 h-4" />
             <span className="hidden sm:inline">Quick search docs...</span>
             <span className="sm:hidden">Search</span>
-            <kbd className="hidden sm:inline-block font-mono text-[10px] px-1.5 py-0.5 rounded border border-[var(--border-color)] bg-[var(--bg-primary)]">
+            <kbd className="hidden sm:inline-block font-mono text-[10px] px-1.5 py-0.5 rounded border border-(--border-color) bg-(--bg-primary)">
               ⌘K
             </kbd>
           </button>
@@ -61,7 +61,7 @@ export function Header({ onOpenSearch, isMobileMenuOpen, onToggleMobileMenu }: H
           {/* Theme Toggle Button */}
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] transition-colors cursor-pointer"
+            className="p-2 rounded-lg border border-(--border-color) bg-(--bg-primary) text-(--text-primary) hover:bg-(--bg-secondary) transition-colors cursor-pointer"
             title={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
             aria-label="Toggle theme"
           >
@@ -77,7 +77,7 @@ export function Header({ onOpenSearch, isMobileMenuOpen, onToggleMobileMenu }: H
             href="https://github.com"
             target="_blank"
             rel="noreferrer"
-            className="hidden sm:flex items-center p-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] transition-colors"
+            className="hidden sm:flex items-center p-2 rounded-lg border border-(--border-color) bg-(--bg-primary) text-(--text-primary) hover:bg-(--bg-secondary) transition-colors"
             aria-label="Code repository"
           >
             <Code2 className="w-4 h-4" />
