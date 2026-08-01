@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Header } from "@/components/Header";
 import { Sidebar } from "@/components/Sidebar";
 import { CodeBlock } from "@/components/CodeBlock";
@@ -15,7 +15,9 @@ export default function HomePage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
-  // Restore position from hash on load & setup IntersectionObserver scrollspy
+  const isManualNav = useRef(false);
+  const scrollTimer = useRef<NodeJS.Timeout | null>(null);
+
   useEffect(() => {
     const hash = window.location.hash.replace("#", "");
     if (hash) {
@@ -54,14 +56,16 @@ export default function HomePage() {
 
     window.addEventListener("scroll", handleScroll);
 
-    // Scrollspy using IntersectionObserver
+    // IntersectionObserver scrollspy only active during manual scrolling
     const observerOptions = {
       root: null,
-      rootMargin: "-100px 0px -60% 0px",
+      rootMargin: "-100px 0px -65% 0px",
       threshold: 0,
     };
 
     const observer = new IntersectionObserver((entries) => {
+      if (isManualNav.current) return;
+
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const id = entry.target.id;
@@ -86,7 +90,6 @@ export default function HomePage() {
       });
     }, observerOptions);
 
-    // Observe sections and subsections
     DOCS_DATA.forEach((sec) => {
       const secEl = document.getElementById(sec.id);
       if (secEl) observer.observe(secEl);
@@ -103,6 +106,9 @@ export default function HomePage() {
   }, []);
 
   const handleSelectSection = (sectionId: string, subId?: string) => {
+    isManualNav.current = true;
+    if (scrollTimer.current) clearTimeout(scrollTimer.current);
+
     setActiveSectionId(sectionId);
     setActiveSubId(subId);
 
@@ -115,11 +121,20 @@ export default function HomePage() {
       const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
+
+    // Re-enable scrollspy only after smooth scrolling completes
+    scrollTimer.current = setTimeout(() => {
+      isManualNav.current = false;
+    }, 1000);
   };
 
   const scrollToTop = () => {
+    isManualNav.current = true;
     window.history.replaceState(null, "", window.location.pathname);
     window.scrollTo({ top: 0, behavior: "smooth" });
+    setTimeout(() => {
+      isManualNav.current = false;
+    }, 1000);
   };
 
   return (
