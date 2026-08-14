@@ -276,8 +276,7 @@ export const DOCS_DATA: DocSection[] = [
           rows: [
             ["year", "number", "Current 4-digit year (e.g. 2026)."],
             ["now", "Date", "Current JavaScript Date object instance."],
-            ["lang", "string", "Direct current active language code in templates (e.g. 'en')."],
-            ["tailwind", "string", 'Ready-to-render HTML link tag string: <link rel="stylesheet" href="/tailwind.css"/>']
+            ["lang", "string", "Direct current active language code in templates (e.g. 'en')."]
           ]
         }
       }
@@ -335,14 +334,14 @@ export const DOCS_DATA: DocSection[] = [
         ]
       },
       {
-        id: "metadata-helper",
-        title: "SEO and Metadata (metadata)",
-        description: "Nxpress automatically renders companion file metadata and injects it before </head> in your layouts (just like Tailwind CSS).",
+        id: "head-injections",
+        title: "Zero-Config Head Injections (SEO & Tailwind CSS)",
+        description: "Nxpress automatically compiles Tailwind CSS and renders companion file metadata (<title>, <meta>, OpenGraph, Twitter), and injects them directly before </head> in your layouts. No template variables are needed.",
         codeSnippets: [
           {
-            title: "Rendering Dynamic SEO Tags in EJS Head",
+            title: "Clean Layout with Automatic Injections",
             language: "html",
-            code: `<head>\n  <%- metadata %>\n  <%- tailwind %>\n</head>`
+            code: `<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <!-- Tailwind stylesheet and SEO tags are automatically injected before </head> -->\n</head>\n<body>\n  <%- body %>\n</body>\n</html>`
           }
         ]
       },
