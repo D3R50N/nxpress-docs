@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "@nxpress/core Documentation",
+  title: "Nxpress Documentation",
   description:
     "Official reference documentation for @nxpress/core Express framework. File-based routing, template components, companion files, cascading middlewares, and client API.",
   icons: {
