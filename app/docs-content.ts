@@ -36,7 +36,7 @@ export const DOCS_DATA: DocSection[] = [
     id: "overview-cli",
     number: "01",
     title: "Overview & CLI",
-    summary: "@nxpress/core is an Express.js-based framework for Node.js providing file-based routing, template components, cascading middlewares, automatic response handling, and built-in template helpers.",
+    summary: "Nxpress is an Express.js-based framework for Node.js providing file-based routing, template components, cascading middlewares, automatic response handling, and built-in template helpers.",
     subsections: [
       {
         id: "starting-server",
@@ -73,7 +73,7 @@ export const DOCS_DATA: DocSection[] = [
         },
         content: [
           "Autocompletion for component renderer $() with component name auto-discovery.",
-          "Intelligent auto-suggestions for all built-in template helpers (cn, icon, ternary, len, tr, meta, etc.).",
+          "Intelligent auto-suggestions for all built-in template helpers (cn, icon, ternary, len, tr, etc.).",
           "Routing navigation and companion file jump shortcuts.",
           "Snippet generators for page companion files, API handlers, and folder middlewares."
         ]
@@ -200,7 +200,7 @@ export const DOCS_DATA: DocSection[] = [
           {
             title: "Dynamic Metadata Function",
             language: "typescript",
-            code: `import type { NxpressMetadata, Request, Response } from '@nxpress/core';\n\nexport async function metadata(req: Request, res: Response): Promise<NxpressMetadata> {\n  return {\n    title: \`Product #\${req.params.id} - Nxpress\`,\n    description: 'Dynamic product details page.'\n  };\n}`
+            code: `import type { NxpressMetadata, Request, Response } from '@nxpress/core';\n\nexport async function metadata(req: Request, res: Response, globals: Record<string, any>): Promise<NxpressMetadata> {\n  return {\n    title: \`\${globals.siteName || 'Nxpress'} - Product #\${req.params.id}\`,\n    description: \`Dynamic product details page for \${globals.lang || 'en'}.\`\n  };\n}`
           }
         ]
       }
@@ -335,14 +335,14 @@ export const DOCS_DATA: DocSection[] = [
         ]
       },
       {
-        id: "meta-helper",
-        title: "SEO and Metadata Helper (meta)",
-        description: "Generates <title>, <meta name=\"description\">, <link rel=\"canonical\">, OpenGraph, and Twitter tags from an NxpressMetadata object or template variables.",
+        id: "metadata-helper",
+        title: "SEO and Metadata (metadata)",
+        description: "Nxpress automatically renders companion file metadata and injects it before </head> in your layouts (just like Tailwind CSS).",
         codeSnippets: [
           {
             title: "Rendering Dynamic SEO Tags in EJS Head",
             language: "html",
-            code: `<head>\n  <%- meta(metadata) %>\n  <%- tailwind %>\n</head>`
+            code: `<head>\n  <%- metadata %>\n  <%- tailwind %>\n</head>`
           }
         ]
       },

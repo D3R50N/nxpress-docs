@@ -173,7 +173,7 @@ export default function HomePage() {
               <span>Technical Reference Manual</span>
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-(--text-primary)">
-              @nxpress/core Documentation
+              Nxpress Documentation
             </h1>
             <p className="text-base sm:text-lg text-(--text-secondary) max-w-3xl leading-relaxed">
               Exhaustive reference manual detailing file-based routing, template engine components, cascading middlewares, companion data fetching, and built-in template helpers.
@@ -337,7 +337,7 @@ export default function HomePage() {
       <footer className="w-full border-t border-(--border-color) bg-(--bg-secondary) py-8 px-4 text-center text-xs text-(--text-muted) font-mono">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
-            @nxpress/core Framework Reference Documentation &bull; {new Date().getFullYear()}
+            Nxpress Reference Documentation &bull; {new Date().getFullYear()}
           </div>
           <div className="flex items-center gap-4">
             <span>Built for High-Performance Express Node.js Apps</span>
