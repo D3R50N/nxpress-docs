@@ -74,7 +74,7 @@ export function SearchModal({ isOpen, onClose, onSelectSection }: SearchModalPro
         <div className="overflow-y-auto p-3 flex-1">
           {query.trim() === "" ? (
             <div className="py-12 text-center text-(--text-muted) text-sm">
-              Type keywords to search through all 13 documentation sections.
+              Type keywords to search through all {DOCS_DATA.length} documentation sections.
             </div>
           ) : filtered.length === 0 ? (
             <div className="py-12 text-center text-(--text-muted) text-sm">
