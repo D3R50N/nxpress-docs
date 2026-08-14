@@ -38,7 +38,7 @@ export function Header({ onOpenSearch, isMobileMenuOpen, onToggleMobileMenu }: H
             />
             <span className="text-lg font-bold">Nxpress</span>
             <span className="hidden sm:inline-block text-xs font-mono px-2 py-0.5 rounded border border-(--border-color) bg-(--bg-secondary) text-(--text-muted)">
-              v1.3.4
+              v1.3.5
             </span>
           </a>
         </div>
