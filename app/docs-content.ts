@@ -202,7 +202,15 @@ export const DOCS_DATA: DocSection[] = [
             title: "Dynamic Metadata Function",
             language: "typescript",
             code: `import type { NxpressMetadata, Request, Response } from '@nxpress/core';\n\nexport async function metadata(req: Request, res: Response): Promise<NxpressMetadata> {\n  return {\n    title: \`Product #\${req.params.id}\`,\n    description: \`Dynamic product details page.\`\n  };\n}`
+          },
+          {
+            title: "Using App Globals / Config in Metadata",
+            language: "typescript",
+            code: `import type { NxpressMetadata, Request, Response } from '@nxpress/core';\nimport config from '../../nxpress.config.json';\n\nexport async function metadata(req: Request, res: Response): Promise<NxpressMetadata> {\n  const siteTitle = config.globals?.title || 'Nxpress Store';\n  return {\n    title: \`\${siteTitle} - Product #\${req.params.id}\`,\n    description: \`View details for product #\${req.params.id}.\`\n  };\n}`
           }
+        ],
+        content: [
+          "Using Globals in Metadata: If you need global configuration or constants inside metadata(), directly import your config (e.g. nxpress.config.json) or custom constants module."
         ]
       }
     ]
