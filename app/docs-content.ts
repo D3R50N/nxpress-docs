@@ -410,23 +410,76 @@ export async function metadata(req: Request, res: Response): Promise<NxpressMeta
         description: "Each HTTP method is defined by an exported named function. Method names are case-insensitive (e.g. GET or get, POST or post, PUT or put, DELETE or delete, PATCH or patch, HEAD, OPTIONS).",
         codeSnippets: [
           {
-            title: "app/api/users.ts",
+            title: "app/api/users/index.ts",
             language: "typescript",
             code: `import type { Request, Response } from '@nxpress/core';
 
-// Uppercase or lowercase methods are both supported
+export const mockUsers = [
+  { id: 1, name: 'Alice', email: 'alice@example.com' },
+  { id: 2, name: 'Bob', email: 'bob@example.com' }
+];
+
+// GET /api/users -> Returns 200 OK + JSON
 export async function GET(req: Request, res: Response) {
-  return {
-    status: 'ok',
-    timestamp: new Date().toISOString()
-  };
+  const search = req.query.search as string;
+  if (search) {
+    return mockUsers.filter(u => u.name.toLowerCase().includes(search.toLowerCase()));
+  }
+  return mockUsers;
 }
 
+// POST /api/users -> Creates record with 201 Created
 export async function POST(req: Request, res: Response) {
-  return {
-    success: true,
-    message: 'Data saved successfully'
-  };
+  const { name, email } = req.body;
+  if (!name || !email) {
+    return res.status(400).json({ error: 'Name and email are required' });
+  }
+
+  const newUser = { id: Date.now(), name, email };
+  mockUsers.push(newUser);
+  return res.status(201).json(newUser);
+}`
+          },
+          {
+            title: "app/api/users/[id].ts",
+            language: "typescript",
+            code: `import type { Request, Response } from '@nxpress/core';
+import { mockUsers } from '.';
+
+// GET /api/users/:id
+export async function GET(req: Request, res: Response) {
+  const userId = Number(req.params.id);
+  const user = mockUsers.find(u => u.id === userId);
+
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+  return user;
+}
+
+// PUT /api/users/:id
+export async function PUT(req: Request, res: Response) {
+  const userId = Number(req.params.id);
+  const { name, email } = req.body;
+  const user = mockUsers.find(u => u.id === userId);
+
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+  user.name = name ?? user.name;
+  user.email = email ?? user.email;
+  return { ...user, updatedAt: new Date().toISOString() };
+}
+
+// DELETE /api/users/:id
+export async function DELETE(req: Request, res: Response) {
+  const userId = Number(req.params.id);
+  const index = mockUsers.findIndex(u => u.id === userId);
+
+  if (index !== -1) {
+    mockUsers.splice(index, 1);
+  }
+  return res.status(204).send();
 }`
           }
         ],
