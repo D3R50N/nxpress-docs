@@ -206,11 +206,20 @@ export const DOCS_DATA: DocSection[] = [
           {
             title: "Using App Globals / Config in Metadata",
             language: "typescript",
-            code: `import type { NxpressMetadata, Request, Response } from '@nxpress/core';\nimport config from '../../nxpress.config.json';\n\nexport async function metadata(req: Request, res: Response): Promise<NxpressMetadata> {\n  const siteTitle = config.globals?.title || 'Nxpress Store';\n  return {\n    title: \`\${siteTitle} - Product #\${req.params.id}\`,\n    description: \`View details for product #\${req.params.id}.\`\n  };\n}`
+            code: `import type { NxpressMetadata, Request, Response } from '@nxpress/core';
+import config from '@/nxpress.config.json';
+
+export async function metadata(req: Request, res: Response): Promise<NxpressMetadata> {
+  const siteTitle = config.globals?.title || 'Nxpress Store';
+  return {
+    title: \`\${siteTitle} - Product #\${req.params.id}\`,
+    description: \`View details for product #\${req.params.id}.\`
+  };
+}`
           }
         ],
         content: [
-          "Using Globals in Metadata: If you need global configuration or constants inside metadata(), directly import your config (e.g. nxpress.config.json) or custom constants module."
+          "Using Globals in Metadata: If you need global configuration or constants inside metadata(), directly import your config (e.g. @/nxpress.config.json) or custom constants module."
         ]
       }
     ]
@@ -653,7 +662,45 @@ export const DOCS_DATA: DocSection[] = [
           {
             title: "app/products/[id].ts (Companion Data & SEO)",
             language: "typescript",
-            code: `import type { Request, Response, NxpressMetadata } from '@nxpress/core';\nimport config from '../../nxpress.config.json';\n\n// 1. Dynamic SEO Metadata\nexport async function metadata(req: Request, res: Response): Promise<NxpressMetadata> {\n  const siteName = config.globals?.title || 'Nxpress Store';\n  return {\n    title: \`\${siteName} - Product #\${req.params.id}\`,\n    description: \`Buy product #\${req.params.id} at the best price.\`,\n    openGraph: {\n      title: \`Product #\${req.params.id}\`,\n      image: \`/images/product-\${req.params.id}.jpg\`\n    }\n  };\n}\n\n// 2. Page Data Loader (Props)\nexport default async function props(req: Request, res: Response) {\n  const { id } = req.params;\n  \n  // Fetch from database or external API\n  const product = {\n    id,\n    name: \`Premium Wireless Headset \${id}\`,\n    price: 199.99,\n    inStock: true,\n    features: ['Active Noise Cancelling', '40h Battery', 'Bluetooth 5.3']\n  };\n\n  const related = [\n    { id: '101', name: 'Protective Case', price: 29.99 },\n    { id: '102', name: 'Audio Cable', price: 14.99 }\n  ];\n\n  return {\n    product,\n    related\n  };\n}`
+            code: `import type { Request, Response, NxpressMetadata } from '@nxpress/core';
+import config from '@/nxpress.config.json';
+
+// 1. Dynamic SEO Metadata
+export async function metadata(req: Request, res: Response): Promise<NxpressMetadata> {
+  const siteName = config.globals?.title || 'Nxpress Store';
+  return {
+    title: \`\${siteName} - Product #\${req.params.id}\`,
+    description: \`Buy product #\${req.params.id} at the best price.\`,
+    openGraph: {
+      title: \`Product #\${req.params.id}\`,
+      image: \`/images/product-\${req.params.id}.jpg\`
+    }
+  };
+}
+
+// 2. Page Data Loader (Props)
+export default async function props(req: Request, res: Response) {
+  const { id } = req.params;
+  
+  // Fetch from database or external API
+  const product = {
+    id,
+    name: \`Premium Wireless Headset \${id}\`,
+    price: 199.99,
+    inStock: true,
+    features: ['Active Noise Cancelling', '40h Battery', 'Bluetooth 5.3']
+  };
+
+  const related = [
+    { id: '101', name: 'Protective Case', price: 29.99 },
+    { id: '102', name: 'Audio Cable', price: 14.99 }
+  ];
+
+  return {
+    product,
+    related
+  };
+}`
           },
           {
             title: "app/products/[id].ejs (Product View Template)",
