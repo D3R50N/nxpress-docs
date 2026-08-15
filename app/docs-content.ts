@@ -406,16 +406,32 @@ export async function metadata(req: Request, res: Response): Promise<NxpressMeta
     subsections: [
       {
         id: "http-method-handlers",
-        title: "HTTP Method Handlers & Default Export",
-        description: "Each HTTP method is defined by an exported named function (get, post, put, delete, patch).",
+        title: "HTTP Method Handlers (Case-Insensitive)",
+        description: "Each HTTP method is defined by an exported named function. Method names are case-insensitive (e.g. GET or get, POST or post, PUT or put, DELETE or delete, PATCH or patch, HEAD, OPTIONS).",
         codeSnippets: [
           {
             title: "app/api/users.ts",
             language: "typescript",
-            code: `import type { Request, Response } from '@nxpress/core';\n\nexport function get(req: Request, res: Response) {\n  return {\n    status: 'ok',\n    timestamp: new Date().toISOString()\n  };\n}\n\nexport function post(req: Request, res: Response) {\n  return {\n    success: true,\n    message: 'Data saved successfully'\n  };\n}`
+            code: `import type { Request, Response } from '@nxpress/core';
+
+// Uppercase or lowercase methods are both supported
+export async function GET(req: Request, res: Response) {
+  return {
+    status: 'ok',
+    timestamp: new Date().toISOString()
+  };
+}
+
+export async function POST(req: Request, res: Response) {
+  return {
+    success: true,
+    message: 'Data saved successfully'
+  };
+}`
           }
         ],
         content: [
+          "Case-Insensitive HTTP Methods: You can export methods in uppercase (GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS) or lowercase (get, post, put, delete, patch, head, options).",
           "Default Fallback Handler: If no matching named HTTP method function is exported, export default function(req, res) catches all HTTP requests for that route."
         ]
       },
