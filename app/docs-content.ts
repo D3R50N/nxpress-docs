@@ -175,7 +175,7 @@ export const DOCS_DATA: DocSection[] = [
       {
         id: "props-export",
         title: "Props Export",
-        description: "The recommended way to return data to a view is via default export.",
+        description: "Companion files can return page data via a default function, named props function, or direct export (objects, arrays, primitives).",
         codeSnippets: [
           {
             title: "app/products/[id].ts (Page Companion)",
@@ -184,7 +184,8 @@ export const DOCS_DATA: DocSection[] = [
           }
         ],
         content: [
-          "Backward Compatibility: Named export `export async function props(req, res)` is also fully supported."
+          "Supported Export Formats: Async/Sync function (default or named props), direct plain object export, or direct array / primitive export (e.g. export default [1, 2, 3]).",
+          "Template Access: Plain object properties are destructured into template locals (<%= title %>) and also accessible via props (<%= props.title %>). Primitives and arrays are accessible directly through props (<%= props %>). If no companion file or export exists, props is null."
         ]
       },
       {
@@ -200,7 +201,7 @@ export const DOCS_DATA: DocSection[] = [
           {
             title: "Dynamic Metadata Function",
             language: "typescript",
-            code: `import type { NxpressMetadata, Request, Response } from '@nxpress/core';\n\nexport async function metadata(req: Request, res: Response, globals: Record<string, any>): Promise<NxpressMetadata> {\n  return {\n    title: \`\${globals.siteName || 'Nxpress'} - Product #\${req.params.id}\`,\n    description: \`Dynamic product details page for \${globals.lang || 'en'}.\`\n  };\n}`
+            code: `import type { NxpressMetadata, Request, Response } from '@nxpress/core';\n\nexport async function metadata(req: Request, res: Response): Promise<NxpressMetadata> {\n  return {\n    title: \`Product #\${req.params.id}\`,\n    description: \`Dynamic product details page.\`\n  };\n}`
           }
         ]
       }
