@@ -633,5 +633,112 @@ export const DOCS_DATA: DocSection[] = [
         ]
       }
     ]
+  },
+  {
+    id: "recipes-use-cases",
+    number: "17",
+    title: "Practical Recipes & Use Cases",
+    summary: "Real-world project architectures and complete code patterns showing companion files, templates, route groups, SSG exports, and REST APIs.",
+    subsections: [
+      {
+        id: "ecommerce-store-usecase",
+        title: "1. E-Commerce Store (Dynamic Routes, SEO, Props & Components)",
+        description: "A complete product catalog showcasing dynamic routes, companion data loaders, dynamic SEO metadata, and custom reusable components.",
+        codeSnippets: [
+          {
+            title: "Project Structure",
+            language: "bash",
+            code: `app/\n├── layout.ejs              # Global root layout with <head> and navbar\n├── index.ejs               # Store home page\n├── index.ts                # Featured products loader\n└── products/\n    ├── [id].ejs            # Product details view\n    └── [id].ts             # Product companion loader & metadata\ncomponents/\n├── Navbar.ejs              # Reusable navigation bar\n└── ProductCard.ejs         # Reusable product card component\nnxpress.config.json         # Engine and global configuration`
+          },
+          {
+            title: "app/products/[id].ts (Companion Data & SEO)",
+            language: "typescript",
+            code: `import type { Request, Response, NxpressMetadata } from '@nxpress/core';\nimport config from '../../nxpress.config.json';\n\n// 1. Dynamic SEO Metadata\nexport async function metadata(req: Request, res: Response): Promise<NxpressMetadata> {\n  const siteName = config.globals?.title || 'Nxpress Store';\n  return {\n    title: \`\${siteName} - Product #\${req.params.id}\`,\n    description: \`Buy product #\${req.params.id} at the best price.\`,\n    openGraph: {\n      title: \`Product #\${req.params.id}\`,\n      image: \`/images/product-\${req.params.id}.jpg\`\n    }\n  };\n}\n\n// 2. Page Data Loader (Props)\nexport default async function props(req: Request, res: Response) {\n  const { id } = req.params;\n  \n  // Fetch from database or external API\n  const product = {\n    id,\n    name: \`Premium Wireless Headset \${id}\`,\n    price: 199.99,\n    inStock: true,\n    features: ['Active Noise Cancelling', '40h Battery', 'Bluetooth 5.3']\n  };\n\n  const related = [\n    { id: '101', name: 'Protective Case', price: 29.99 },\n    { id: '102', name: 'Audio Cable', price: 14.99 }\n  ];\n\n  return {\n    product,\n    related\n  };\n}`
+          },
+          {
+            title: "app/products/[id].ejs (Product View Template)",
+            language: "html",
+            code: `<div class="container mx-auto py-8 px-4">\n  <nav class="text-sm mb-6 text-gray-500">\n    <a href="/" class="hover:underline">Home</a> &gt; \n    <a href="/products" class="hover:underline">Products</a> &gt; \n    <span class="text-gray-800 font-semibold"><%= product.name %></span>\n  </nav>\n\n  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">\n    <div>\n      <img src="/images/product-<%= product.id %>.jpg" alt="<%= product.name %>" class="rounded-xl shadow-lg w-full" />\n    </div>\n    \n    <div>\n      <h1 class="text-3xl font-bold text-gray-900 mb-2"><%= product.name %></h1>\n      <p class="text-2xl text-indigo-600 font-bold mb-4">$<%= product.price.toFixed(2) %></p>\n      \n      <h3 class="font-semibold text-gray-700 mb-2">Key Features:</h3>\n      <ul class="list-disc pl-5 mb-6 text-gray-600 space-y-1">\n        <% product.features.forEach(function(feat) { %>\n          <li><%= feat %></li>\n        <% }); %>\n      </ul>\n\n      <button class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700">\n        Add to Cart\n      </button>\n    </div>\n  </div>\n\n  <div class="mt-12">\n    <h2 class="text-2xl font-bold mb-4">Related Accessories</h2>\n    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">\n      <% related.forEach(function(item) { %>\n        <ProductCard id="<%= item.id %>" name="<%= item.name %>" price="<%= item.price %>" />\n      <% }); %>\n    </div>\n  </div>\n</div>`
+          },
+          {
+            title: "components/ProductCard.ejs (Custom Component)",
+            language: "html",
+            code: `<div class="border rounded-lg p-4 bg-white shadow hover:shadow-md transition">\n  <h4 class="font-bold text-gray-800"><%= name %></h4>\n  <p class="text-indigo-600 font-semibold mt-1">$<%= price %></p>\n  <a href="/products/<%= id %>" class="inline-block mt-3 text-sm text-indigo-600 font-medium hover:underline">\n    View Details &rarr;\n  </a>\n</div>`
+          }
+        ]
+      },
+      {
+        id: "i18n-blog-ssg-usecase",
+        title: "2. Multi-Language Blog with Static Site Generation (SSG)",
+        description: "A fast multi-language blog pre-rendering static HTML pages with generateStaticParams, translation dictionaries, and automated export.",
+        codeSnippets: [
+          {
+            title: "Project Structure",
+            language: "bash",
+            code: `app/\n├── layout.ejs\n└── blog/\n    ├── [slug].ejs          # Blog post template with tr() helpers\n    └── [slug].ts           # generateStaticParams, props & metadata\nlocales/\n├── en.json                 # English dictionary\n└── fr.json                 # French dictionary\nnxpress.config.json`
+          },
+          {
+            title: "locales/en.json & locales/fr.json",
+            language: "json",
+            code: `// locales/en.json\n{\n  "blog_title": "Nxpress Engineering Blog",\n  "read_time": "{{minutes}} min read",\n  "author": "By {{name}}"\n}\n\n// locales/fr.json\n{\n  "blog_title": "Blog d'Ingénierie Nxpress",\n  "read_time": "Temps de lecture : {{minutes}} min",\n  "author": "Par {{name}}"\n}`
+          },
+          {
+            title: "app/blog/[slug].ts (Static Params, Data & SEO)",
+            language: "typescript",
+            code: `import type { Request, Response, NxpressMetadata } from '@nxpress/core';\n\n// 1. Export list of dynamic slugs for Static Site Generation (nxpress export)\nexport async function generateStaticParams() {\n  return [\n    { slug: 'announcing-nxpress-v1' },\n    { slug: 'file-based-routing-in-depth' },\n    { slug: 'mastering-static-export' }\n  ];\n}\n\n// 2. Dynamic SEO Metadata\nexport async function metadata(req: Request, res: Response): Promise<NxpressMetadata> {\n  const { slug } = req.params;\n  return {\n    title: \`Blog - \${slug}\`,\n    description: \`Read the full article about \${slug} on our blog.\`\n  };\n}\n\n// 3. Post Content Loader\nexport default async function props(req: Request, res: Response) {\n  const { slug } = req.params;\n  return {\n    slug,\n    title: slug.replace(/-/g, ' ').toUpperCase(),\n    readMinutes: 5,\n    authorName: 'Alex Rivers',\n    content: 'Nxpress provides an intuitive developer experience with minimal overhead...'\n  };\n}`
+          },
+          {
+            title: "app/blog/[slug].ejs (Template with i18n Helpers)",
+            language: "html",
+            code: `<article class="max-w-3xl mx-auto py-12 px-4">\n  <div class="flex items-center justify-between text-sm text-gray-500 mb-4">\n    <span><%= tr('author', { name: authorName }) %></span>\n    <span><%= tr('read_time', { minutes: readMinutes }) %></span>\n  </div>\n\n  <h1 class="text-4xl font-extrabold text-gray-900 mb-6"><%= title %></h1>\n\n  <div class="prose lg:prose-xl text-gray-700 leading-relaxed">\n    <p><%= content %></p>\n  </div>\n\n  <div class="mt-8 pt-6 border-t flex gap-4 text-sm">\n    <a href="/<%= slug %>?lang=en" class="font-medium text-indigo-600 hover:underline">English</a>\n    <a href="/fr/<%= slug %>" class="font-medium text-indigo-600 hover:underline">Français</a>\n  </div>\n</article>`
+          }
+        ]
+      },
+      {
+        id: "admin-dashboard-auth-usecase",
+        title: "3. Protected Admin Dashboard (Route Groups & Middleware Cascades)",
+        description: "How to use route groups (folder parentheses) to isolate layouts and apply route-group middleware without polluting the URL structure.",
+        codeSnippets: [
+          {
+            title: "Project Structure",
+            language: "bash",
+            code: `app/\n├── (auth)/                 # URL: /login (no (auth) in path)\n│   ├── login.ejs\n│   └── login.ts\n└── (dashboard)/            # URL: /overview, /analytics, /settings\n    ├── middleware.ts       # Protects all routes inside (dashboard)/\n    ├── layout.ejs          # Dashboard shell with sidebar\n    ├── overview.ejs\n    └── overview.ts`
+          },
+          {
+            title: "app/(dashboard)/middleware.ts (Directory Auth Guard)",
+            language: "typescript",
+            code: `import type { Request, Response, NextFunction } from '@nxpress/core';\n\nexport default function authGuard(req: Request, res: Response, next: NextFunction) {\n  const sessionToken = req.cookies?.session_token || req.headers['authorization'];\n\n  if (!sessionToken) {\n    // Redirect unauthenticated requests to login page\n    return res.redirect('/login');\n  }\n\n  // Attach authenticated user profile to res.locals\n  res.locals.user = { id: 1, name: 'Admin', role: 'admin' };\n  next();\n}`
+          },
+          {
+            title: "app/(dashboard)/layout.ejs (Dedicated Dashboard Layout)",
+            language: "html",
+            code: `<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>Admin Dashboard</title>\n  <link rel="stylesheet" href="/styles.css">\n</head>\n<body class="flex min-h-screen bg-gray-100">\n  <!-- Sidebar Navigation -->\n  <aside class="w-64 bg-gray-900 text-white p-6">\n    <div class="text-xl font-bold mb-8">Nxpress Admin</div>\n    <nav class="space-y-3">\n      <a href="/overview" class="block py-2 px-3 rounded hover:bg-gray-800">Overview</a>\n      <a href="/analytics" class="block py-2 px-3 rounded hover:bg-gray-800">Analytics</a>\n      <a href="/settings" class="block py-2 px-3 rounded hover:bg-gray-800">Settings</a>\n    </nav>\n  </aside>\n\n  <!-- Main Content Area -->\n  <main class="flex-1 p-8">\n    <header class="flex justify-between items-center mb-8 pb-4 border-b">\n      <h2 class="text-2xl font-bold">Welcome back, <%= user?.name %></h2>\n      <a href="/api/auth/logout" class="text-sm text-red-600 hover:underline">Logout</a>\n    </header>\n    \n    <!-- Child Page Injected Here -->\n    <%- body %>\n  </main>\n</body>\n</html>`
+          }
+        ]
+      },
+      {
+        id: "rest-api-crud-usecase",
+        title: "4. Full REST API with Auto-Responses & Status Codes",
+        description: "Building JSON REST APIs using file-based HTTP method exports, cascading API middlewares, and automatic response formatting.",
+        codeSnippets: [
+          {
+            title: "Project Structure",
+            language: "bash",
+            code: `app/\n└── api/\n    ├── middleware.ts       # Global API middleware (CORS, Rate limiting, Token verify)\n    └── users/\n        ├── index.ts        # GET /api/users, POST /api/users\n        └── [id].ts         # GET /api/users/:id, PUT /api/users/:id, DELETE /api/users/:id`
+          },
+          {
+            title: "app/api/users/index.ts (List & Create)",
+            language: "typescript",
+            code: `import type { Request, Response } from '@nxpress/core';\n\nconst mockUsers = [\n  { id: 1, name: 'Alice', email: 'alice@example.com' },\n  { id: 2, name: 'Bob', email: 'bob@example.com' }\n];\n\n// GET /api/users -> Automatically responds with 200 OK + JSON\nexport async function GET(req: Request, res: Response) {\n  const search = req.query.search as string;\n  if (search) {\n    return mockUsers.filter(u => u.name.toLowerCase().includes(search.toLowerCase()));\n  }\n  return mockUsers;\n}\n\n// POST /api/users -> Creates new record with 201 Created\nexport async function POST(req: Request, res: Response) {\n  const { name, email } = req.body;\n  if (!name || !email) {\n    return res.status(400).json({ error: 'Name and email are required' });\n  }\n  \n  const newUser = { id: Date.now(), name, email };\n  mockUsers.push(newUser);\n  \n  return res.status(201).json(newUser);\n}`
+          },
+          {
+            title: "app/api/users/[id].ts (Get, Update, Delete by ID)",
+            language: "typescript",
+            code: `import type { Request, Response } from '@nxpress/core';\n\n// GET /api/users/:id\nexport async function GET(req: Request, res: Response) {\n  const userId = Number(req.params.id);\n  const user = { id: userId, name: 'Alice', email: 'alice@example.com' };\n  \n  if (!user) {\n    return res.status(404).json({ error: 'User not found' });\n  }\n  return user;\n}\n\n// PUT /api/users/:id\nexport async function PUT(req: Request, res: Response) {\n  const userId = Number(req.params.id);\n  const { name, email } = req.body;\n  return { id: userId, name, email, updatedAt: new Date().toISOString() };\n}\n\n// DELETE /api/users/:id\nexport async function DELETE(req: Request, res: Response) {\n  return res.status(204).send();\n}`
+          }
+        ]
+      }
+    ]
   }
 ];
+
