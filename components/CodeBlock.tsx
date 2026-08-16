@@ -46,46 +46,53 @@ export function CodeBlock({ title, language = "typescript", code }: CodeBlockPro
   };
 
   return (
-    <div className="my-4 rounded-lg border border-(--border-color) bg-(--bg-code) overflow-hidden font-mono text-sm shadow-xs">
+    <div className="my-4 rounded-2xl border border-slate-800/80 bg-[#1c2333] text-slate-100 overflow-hidden font-mono text-xs sm:text-sm shadow-md">
       {(title || language) && (
-        <div className="flex items-center justify-between px-4 py-2 border-b border-(--border-color) bg-(--bg-secondary) text-(--text-muted) text-xs">
-          <span className="font-semibold uppercase tracking-wider text-(--text-secondary) font-mono">
-            {title || language}
-          </span>
+        <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-800 bg-[#151b28] text-slate-400 text-xs">
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 opacity-60">
+              <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
+              <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
+              <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
+            </div>
+            <span className="font-semibold text-slate-300 font-mono text-[11px] ml-1">
+              {title || language}
+            </span>
+          </div>
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded border border-(--border-color) bg-(--bg-primary) text-(--text-primary) hover:bg-(--bg-card) transition-colors cursor-pointer text-xs"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-300 transition-colors cursor-pointer text-xs"
             aria-label="Copy code"
           >
             {copied ? (
               <>
-                <Check className="w-3.5 h-3.5 text-emerald-500" />
-                <span>Copied</span>
+                <Check className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="text-[11px] text-emerald-400">Copied</span>
               </>
             ) : (
               <>
                 <Copy className="w-3.5 h-3.5" />
-                <span>Copy</span>
+                <span className="text-[11px]">Copy</span>
               </>
             )}
           </button>
         </div>
       )}
-      <div className="relative p-4 overflow-x-auto">
+      <div className="relative p-4 sm:p-5 overflow-x-auto">
         {!title && !language && (
           <button
             onClick={handleCopy}
-            className="absolute top-2 right-2 z-10 flex items-center gap-1 px-2 py-1 rounded border border-(--border-color) bg-(--bg-primary) text-(--text-primary) hover:bg-(--bg-card) transition-colors cursor-pointer text-xs"
+            className="absolute top-3 right-3 z-10 flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-300 transition-colors cursor-pointer text-xs"
             aria-label="Copy code"
           >
             {copied ? (
-              <Check className="w-3.5 h-3.5 text-emerald-500" />
+              <Check className="w-3.5 h-3.5 text-emerald-400" />
             ) : (
               <Copy className="w-3.5 h-3.5" />
             )}
           </button>
         )}
-        <pre className="text-xs md:text-sm leading-relaxed font-mono">
+        <pre className="text-xs sm:text-[13px] leading-relaxed font-mono">
           <code
             className={`language-${language}`}
             dangerouslySetInnerHTML={{ __html: highlightedHtml || code }}

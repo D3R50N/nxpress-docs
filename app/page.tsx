@@ -2,18 +2,32 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { Header } from "@/components/Header";
+import { SubHeader } from "@/components/SubHeader";
 import { Sidebar } from "@/components/Sidebar";
+import { RightSidebar } from "@/components/RightSidebar";
 import { CodeBlock } from "@/components/CodeBlock";
+import { PackageManagerSelector } from "@/components/PackageManagerSelector";
 import { SearchModal } from "@/components/SearchModal";
 import { DOCS_DATA } from "@/app/docs-content";
-import { Terminal, Shield, FileCode, ChevronRight, Layers, ArrowUp, Code2, ExternalLink } from "lucide-react";
+import {
+  Terminal,
+  Shield,
+  FileCode,
+  Layers,
+  ChevronRight,
+  Code2,
+  ExternalLink,
+  Play,
+  Sparkles,
+  Zap,
+} from "lucide-react";
 
 export default function HomePage() {
-  const [activeSectionId, setActiveSectionId] = useState("");
+  const [activeSectionId, setActiveSectionId] = useState("getting-started");
   const [activeSubId, setActiveSubId] = useState<string | undefined>("starting-server");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [filterQuery, setFilterQuery] = useState("");
 
   const isManualNav = useRef(false);
   const scrollTimer = useRef<NodeJS.Timeout | null>(null);
@@ -37,29 +51,17 @@ export default function HomePage() {
           }
         }
         setTimeout(() => {
-          const yOffset = -80;
+          const yOffset = -100;
           const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
           window.scrollTo({ top: y, behavior: "auto" });
         }, 100);
       }
-    } else {
-      const savedScroll = sessionStorage.getItem("nxpress_docs_scroll_y");
-      if (savedScroll) {
-        window.scrollTo(0, parseInt(savedScroll, 10));
-      }
     }
 
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 400);
-      sessionStorage.setItem("nxpress_docs_scroll_y", window.scrollY.toString());
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    // IntersectionObserver scrollspy only active during manual scrolling
+    // IntersectionObserver scrollspy
     const observerOptions = {
       root: null,
-      rootMargin: "-100px 0px -65% 0px",
+      rootMargin: "-120px 0px -60% 0px",
       threshold: 0,
     };
 
@@ -100,7 +102,6 @@ export default function HomePage() {
     });
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
       observer.disconnect();
     };
   }, []);
@@ -117,15 +118,14 @@ export default function HomePage() {
 
     const element = document.getElementById(targetId);
     if (element) {
-      const yOffset = -80; // Header offset
+      const yOffset = -100;
       const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
 
-    // Re-enable scrollspy only after smooth scrolling completes
     scrollTimer.current = setTimeout(() => {
       isManualNav.current = false;
-    }, 1000);
+    }, 800);
   };
 
   const scrollToTop = () => {
@@ -134,11 +134,14 @@ export default function HomePage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
     setTimeout(() => {
       isManualNav.current = false;
-    }, 1000);
+    }, 800);
   };
 
+  const currentSection = DOCS_DATA.find((s) => s.id === activeSectionId);
+  const currentSub = currentSection?.subsections.find((s) => s.id === activeSubId);
+
   return (
-    <div className="min-h-screen flex flex-col bg-(--bg-primary) text-(--text-primary) font-sans antialiased">
+    <div className="min-h-screen p-2 sm:p-4 md:p-6 lg:p-8 flex flex-col justify-start">
       {/* Search Modal */}
       <SearchModal
         isOpen={isSearchOpen}
@@ -146,215 +149,264 @@ export default function HomePage() {
         onSelectSection={handleSelectSection}
       />
 
-      {/* Top Header Navigation */}
-      <Header
-        onOpenSearch={() => setIsSearchOpen(true)}
-        isMobileMenuOpen={isMobileMenuOpen}
-        onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-      />
-
-      {/* Main Workspace Layout */}
-      <div className="flex-1 flex max-w-7xl w-full mx-auto">
-        {/* Sidebar Index */}
-        <Sidebar
-          activeSectionId={activeSectionId}
-          activeSubId={activeSubId}
-          onSelectSection={handleSelectSection}
-          isOpenMobile={isMobileMenuOpen}
-          onCloseMobile={() => setIsMobileMenuOpen(false)}
+      {/* Main Floating App-Card Container */}
+      <div className="w-full max-w-[1520px] mx-auto rounded-[24px] sm:rounded-[32px] md:rounded-[36px] bg-(--bg-primary) border border-(--border-strong) shadow-2xl shadow-black/10 dark:shadow-black/60 overflow-hidden flex flex-col flex-1">
+        {/* Top Header */}
+        <Header
+          onOpenSearch={() => setIsSearchOpen(true)}
+          isMobileMenuOpen={isMobileMenuOpen}
+          onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          activeVersion="v1.3.8"
         />
 
-        {/* Primary Content View */}
-        <main className="flex-1 min-w-0 p-4 sm:p-8 md:p-12 space-y-16">
-          {/* Documentation Banner Header */}
-          <div className="border-b border-(--border-color) pb-8 space-y-4">
-            <div className="flex items-center gap-2 text-xs font-mono font-semibold uppercase tracking-wider text-(--text-muted)">
-              <Terminal className="w-4 h-4 text-(--text-primary)" />
-              <span>Technical Reference Manual</span>
-            </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-(--text-primary)">
-              Nxpress Documentation
-            </h1>
-            <p className="text-base sm:text-lg text-(--text-secondary) max-w-3xl leading-relaxed">
-              Exhaustive reference manual detailing file-based routing, template engine components, cascading middlewares, companion data fetching, and built-in template helpers.
-            </p>
+        {/* SubHeader / Breadcrumb & Status bar */}
+        <SubHeader
+          currentSectionTitle={currentSection?.title}
+          currentSubTitle={currentSub?.title}
+        />
 
-            {/* Quick Specs Badges */}
-            <div className="flex flex-wrap gap-2 pt-2">
-              <div className="flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-md border border-(--border-color) bg-(--bg-secondary) text-(--text-secondary)">
-                <Shield className="w-3.5 h-3.5" />
-                <span>Express.js Based</span>
+        {/* Main 3-Column Workspace Layout */}
+        <div className="flex-1 flex w-full relative">
+          {/* Left Sidebar */}
+          <Sidebar
+            activeSectionId={activeSectionId}
+            activeSubId={activeSubId}
+            onSelectSection={handleSelectSection}
+            isOpenMobile={isMobileMenuOpen}
+            onCloseMobile={() => setIsMobileMenuOpen(false)}
+            filterQuery={filterQuery}
+            onFilterChange={setFilterQuery}
+          />
+
+          {/* Center Main Content */}
+          <main className="flex-1 min-w-0 p-4 sm:p-6 md:p-8 lg:p-10 space-y-12">
+            {/* Hero Banner Video / Visual Card */}
+            <div className="relative rounded-2xl md:rounded-3xl overflow-hidden bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white p-6 sm:p-8 border border-slate-700/60 shadow-lg">
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.3),transparent_70%)]" />
+              <div className="relative z-10 max-w-2xl space-y-3">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-semibold">
+                  <Zap className="w-3.5 h-3.5 text-blue-400" />
+                  <span>Nxpress Framework v1.3.8 Released</span>
+                </div>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
+                  Modern File-Based Routing for Express.js
+                </h1>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  Next-generation developer experience combining Express performance, intuitive template engines, cascading middlewares, and zero-config API routes.
+                </p>
+                <div className="pt-2 flex flex-wrap items-center gap-3">
+                  <a
+                    href="#getting-started"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-md transition-all"
+                  >
+                    <span>Get Started</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </a>
+                  <a
+                    href="https://marketplace.visualstudio.com/items?itemName=MonsieurDev.nxpress"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-medium backdrop-blur-xs border border-white/10 transition-all"
+                  >
+                    <Code2 className="w-4 h-4" />
+                    <span>VS Code Extension</span>
+                  </a>
+                </div>
               </div>
-              <div className="flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-md border border-(--border-color) bg-(--bg-secondary) text-(--text-secondary)">
-                <FileCode className="w-3.5 h-3.5" />
-                <span>EJS / HBS / Nunjucks / Liquid</span>
+            </div>
+
+            {/* Quick Install Package Manager Tabs Widget */}
+            <div className="rounded-2xl border border-(--border-color) bg-(--bg-card) p-5 sm:p-6 shadow-xs space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-sm sm:text-base font-bold text-(--text-primary)">
+                    Quick Installation
+                  </h3>
+                  <p className="text-xs text-(--text-secondary)">
+                    Scaffold a new project in seconds with your preferred package manager.
+                  </p>
+                </div>
+                <span className="text-[11px] font-mono font-medium px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                  Recommended: pnpm
+                </span>
               </div>
-              <div className="flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-md border border-(--border-color) bg-(--bg-secondary) text-(--text-secondary)">
-                <Layers className="w-3.5 h-3.5" />
-                <span>Tailwind CSS v4</span>
-              </div>
+
+              <PackageManagerSelector
+                commandTemplate={{
+                  pnpm: "pnpm create nxpress-app@latest my-app",
+                  npm: "npx create-nxpress-app@latest my-app",
+                  yarn: "yarn create nxpress-app my-app",
+                  bun: "bun create nxpress-app my-app",
+                }}
+              />
+            </div>
+
+            {/* Documentation Sections */}
+            <div className="space-y-16">
+              {DOCS_DATA.map((section) => (
+                <section
+                  key={section.id}
+                  id={section.id}
+                  className="scroll-mt-28 space-y-6 border-b border-(--border-color) pb-12 last:border-b-0"
+                >
+                  {/* Section Title Header */}
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-3">
+                      <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-lg border border-(--border-strong) bg-(--bg-secondary) text-blue-600 dark:text-blue-400">
+                        {section.number}
+                      </span>
+                      <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-(--text-primary)">
+                        {section.title}
+                      </h2>
+                    </div>
+                    <p className="text-xs sm:text-sm text-(--text-secondary) leading-relaxed">
+                      {section.summary}
+                    </p>
+                  </div>
+
+                  {/* Subsections Cards */}
+                  <div className="space-y-8">
+                    {section.subsections.map((sub) => (
+                      <div
+                        key={sub.id}
+                        id={sub.id}
+                        className="scroll-mt-28 space-y-4 rounded-2xl p-5 sm:p-7 border border-(--border-color) bg-(--bg-card) shadow-xs hover:border-(--border-strong) transition-colors"
+                      >
+                        <h3 className="text-base sm:text-lg font-bold text-(--text-primary) flex items-center gap-2">
+                          <ChevronRight className="w-4 h-4 text-blue-500 shrink-0" />
+                          <span>{sub.title}</span>
+                        </h3>
+
+                        {sub.description && (
+                          <p className="text-xs sm:text-sm text-(--text-secondary) leading-relaxed">
+                            {sub.description}
+                          </p>
+                        )}
+
+                        {/* Direct External Link */}
+                        {sub.link && (
+                          <div className="py-1">
+                            <a
+                              href={sub.link.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-(--border-strong) bg-(--bg-secondary) text-(--text-primary) hover:bg-(--bg-primary) hover:border-blue-500 font-semibold text-xs transition-all shadow-xs"
+                            >
+                              <span>{sub.link.label}</span>
+                              <ExternalLink className="w-3.5 h-3.5 text-(--text-muted) shrink-0" />
+                            </a>
+                          </div>
+                        )}
+
+                        {/* Content Bullets */}
+                        {sub.content && sub.content.length > 0 && (
+                          <ul className="space-y-2 text-xs sm:text-sm text-(--text-secondary) list-disc pl-5">
+                            {sub.content.map((item, idx) => (
+                              <li key={idx} className="leading-relaxed">
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+
+                        {/* Code Snippets */}
+                        {sub.codeSnippets && sub.codeSnippets.length > 0 && (
+                          <div className="space-y-4 pt-1">
+                            {sub.codeSnippets.map((snippet, idx) => (
+                              <CodeBlock
+                                key={idx}
+                                title={snippet.title}
+                                language={snippet.language}
+                                code={snippet.code}
+                              />
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Tables */}
+                        {sub.table && (
+                          <div className="overflow-x-auto my-4 rounded-xl border border-(--border-strong)">
+                            <table className="w-full text-left text-xs font-sans">
+                              <thead className="bg-(--bg-secondary) text-(--text-primary) border-b border-(--border-strong) font-semibold uppercase tracking-wider text-[10px]">
+                                <tr>
+                                  {sub.table.headers.map((h, i) => (
+                                    <th key={i} className="px-4 py-3">
+                                      {h}
+                                    </th>
+                                  ))}
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y divide-(--border-color) text-(--text-secondary)">
+                                {sub.table.rows.map((row, rIdx) => (
+                                  <tr
+                                    key={rIdx}
+                                    className="hover:bg-(--bg-secondary)/60 transition-colors"
+                                  >
+                                    {row.map((cell, cIdx) => (
+                                      <td
+                                        key={cIdx}
+                                        className={`px-4 py-3 ${
+                                          cIdx === 0
+                                            ? "font-mono font-semibold text-(--text-primary)"
+                                            : ""
+                                        }`}
+                                      >
+                                        {cell}
+                                      </td>
+                                    ))}
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              ))}
+            </div>
+          </main>
+
+          {/* Right Sidebar (TOC & Widgets) */}
+          <RightSidebar
+            activeSectionId={activeSectionId}
+            activeSubId={activeSubId}
+            onSelectSub={handleSelectSection}
+            onScrollToTop={scrollToTop}
+          />
+        </div>
+
+        {/* Floating App Card Footer */}
+        <footer className="w-full border-t border-(--border-color) bg-(--bg-secondary)/60 py-6 px-6 sm:px-8 text-xs text-(--text-muted) font-sans">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div>
+              Nxpress Official Reference &bull; {new Date().getFullYear()}
+            </div>
+            <div className="flex items-center gap-4 text-[11px]">
+              <a
+                href="https://github.com/D3R50N/nxpress"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-(--text-primary) transition-colors"
+              >
+                GitHub
+              </a>
+              <span>&bull;</span>
               <a
                 href="https://marketplace.visualstudio.com/items?itemName=MonsieurDev.nxpress"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-md border border-(--border-color) bg-(--bg-secondary) text-(--text-primary) hover:bg-(--bg-card) transition-all"
+                className="hover:text-(--text-primary) transition-colors"
               >
-                <Code2 className="w-3.5 h-3.5" />
-                <span>VS Code Extension: MonsieurDev.nxpress</span>
+                VS Code Extension
               </a>
+              <span>&bull;</span>
+              <span>MIT License</span>
             </div>
           </div>
-
-          {/* Documentation Sections */}
-          <div className="space-y-20">
-            {DOCS_DATA.map((section) => (
-              <section
-                key={section.id}
-                id={section.id}
-                className="scroll-mt-24 space-y-8 border-b border-(--border-color) pb-12 last:border-b-0"
-              >
-                {/* Section Header */}
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <span className="font-mono text-sm font-bold px-2.5 py-1 rounded border border-(--border-color) bg-(--bg-secondary) text-(--text-muted)">
-                      {section.number}
-                    </span>
-                    <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-(--text-primary)">
-                      {section.title}
-                    </h2>
-                  </div>
-                  <p className="text-base text-(--text-secondary) leading-relaxed">
-                    {section.summary}
-                  </p>
-                </div>
-
-                {/* Subsections */}
-                <div className="space-y-12">
-                  {section.subsections.map((sub) => (
-                    <div
-                      key={sub.id}
-                      id={sub.id}
-                      className="scroll-mt-24 space-y-4 rounded-xl p-4 sm:p-6 border border-(--border-color) bg-(--bg-card) shadow-xs"
-                    >
-                      <h3 className="text-lg sm:text-xl font-bold text-(--text-primary) flex items-center gap-2">
-                        <ChevronRight className="w-4 h-4 text-(--text-muted) shrink-0" />
-                        <span>{sub.title}</span>
-                      </h3>
-
-                      {sub.description && (
-                        <p className="text-sm text-(--text-secondary) leading-relaxed">
-                          {sub.description}
-                        </p>
-                      )}
-
-                      {/* Direct External Link */}
-                      {sub.link && (
-                        <div className="py-1">
-                          <a
-                            href={sub.link.url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-(--border-color) bg-(--bg-secondary) text-(--text-primary) hover:bg-(--bg-primary) hover:border-(--text-primary) font-semibold text-xs sm:text-sm transition-all shadow-xs"
-                          >
-                            <span>{sub.link.label}</span>
-                            <ExternalLink className="w-4 h-4 text-(--text-muted) shrink-0" />
-                          </a>
-                        </div>
-                      )}
-
-                      {/* Content Bullets */}
-                      {sub.content && sub.content.length > 0 && (
-                        <ul className="space-y-2 text-sm text-(--text-secondary) list-disc pl-5">
-                          {sub.content.map((item, idx) => (
-                            <li key={idx} className="leading-relaxed">
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-
-                      {/* Code Snippets */}
-                      {sub.codeSnippets && sub.codeSnippets.length > 0 && (
-                        <div className="space-y-4 pt-2">
-                          {sub.codeSnippets.map((snippet, idx) => (
-                            <CodeBlock
-                              key={idx}
-                              title={snippet.title}
-                              language={snippet.language}
-                              code={snippet.code}
-                            />
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Tables */}
-                      {sub.table && (
-                        <div className="overflow-x-auto my-4 rounded-lg border border-(--border-color)">
-                          <table className="w-full text-left text-xs sm:text-sm font-sans">
-                            <thead className="bg-(--bg-secondary) text-(--text-primary) border-b border-(--border-color) font-semibold uppercase tracking-wider text-[11px]">
-                              <tr>
-                                {sub.table.headers.map((h, i) => (
-                                  <th key={i} className="px-4 py-3">
-                                    {h}
-                                  </th>
-                                ))}
-                              </tr>
-                            </thead>
-                            <tbody className="divide-y divide-(--border-color) text-(--text-secondary)">
-                              {sub.table.rows.map((row, rIdx) => (
-                                <tr
-                                  key={rIdx}
-                                  className="hover:bg-(--bg-secondary)/50 transition-colors"
-                                >
-                                  {row.map((cell, cIdx) => (
-                                    <td
-                                      key={cIdx}
-                                      className={`px-4 py-3 ${
-                                        cIdx === 0
-                                          ? "font-mono font-semibold text-(--text-primary)"
-                                          : ""
-                                      }`}
-                                    >
-                                      {cell}
-                                    </td>
-                                  ))}
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </section>
-            ))}
-          </div>
-        </main>
+        </footer>
       </div>
-
-      {/* Footer */}
-      <footer className="w-full border-t border-(--border-color) bg-(--bg-secondary) py-8 px-4 text-center text-xs text-(--text-muted) font-mono">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div>
-            Nxpress Reference Documentation &bull; {new Date().getFullYear()}
-          </div>
-          <div className="flex items-center gap-4">
-            <span>Built for High-Performance Express Node.js Apps</span>
-          </div>
-        </div>
-      </footer>
-
-      {/* Scroll to Top Floating Button */}
-      {showScrollTop && (
-        <button
-          onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-40 p-3 rounded-full border border-(--border-color) bg-(--bg-primary) text-(--text-primary) shadow-lg hover:bg-(--bg-secondary) transition-all cursor-pointer"
-          aria-label="Scroll to top"
-        >
-          <ArrowUp className="w-5 h-5" />
-        </button>
-      )}
     </div>
   );
 }
