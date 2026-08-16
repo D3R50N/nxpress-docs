@@ -4,14 +4,9 @@ import React, { useState } from "react";
 import { DOCS_DATA } from "@/app/docs-content";
 import {
   Search,
-  BookOpen,
-  Send,
-  Layers,
-  MessageSquare,
   ChevronDown,
   ChevronRight,
-  Sparkles,
-  FileCode2,
+  BookOpen,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -46,67 +41,15 @@ export function Sidebar({
   const content = (
     <div className="flex flex-col h-full py-4 px-3 overflow-y-auto font-sans">
       {/* Fast Search Input */}
-      <div className="relative mb-4 px-1">
+      <div className="relative mb-3 px-1">
         <Search className="w-3.5 h-3.5 absolute left-3.5 top-1/2 -translate-y-1/2 text-(--text-muted)" />
         <input
           type="text"
           value={filterQuery}
           onChange={(e) => onFilterChange(e.target.value)}
-          placeholder="Fast search..."
-          className="w-full pl-9 pr-3 py-1.5 rounded-full border border-(--border-strong) bg-(--bg-secondary) text-xs text-(--text-primary) placeholder:text-(--text-muted) focus:outline-none focus:border-blue-400 transition-colors"
+          placeholder="Filter documentation..."
+          className="w-full pl-9 pr-3 py-1.5 rounded-xl border border-(--border-strong) bg-(--bg-secondary) text-xs text-(--text-primary) placeholder:text-(--text-muted) focus:outline-none focus:border-blue-500 transition-colors"
         />
-      </div>
-
-      {/* Quick Pinned Items */}
-      <div className="space-y-1 mb-5 px-1 border-b border-(--border-color) pb-4">
-        <button
-          onClick={() => {
-            onSelectSection("getting-started", "starting-server");
-            onCloseMobile();
-          }}
-          className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl text-xs font-medium text-(--text-primary) hover:bg-(--bg-secondary) transition-colors cursor-pointer"
-        >
-          <div className="w-5 h-5 rounded-md bg-amber-500/10 text-amber-500 flex items-center justify-center">
-            <BookOpen className="w-3 h-3" />
-          </div>
-          <span>Documentation</span>
-        </button>
-
-        <a
-          href="https://github.com/D3R50N/nxpress/releases"
-          target="_blank"
-          rel="noreferrer"
-          className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl text-xs font-medium text-(--text-secondary) hover:text-(--text-primary) hover:bg-(--bg-secondary) transition-colors"
-        >
-          <div className="w-5 h-5 rounded-md bg-blue-500/10 text-blue-500 flex items-center justify-center">
-            <Send className="w-3 h-3" />
-          </div>
-          <span>Roadmap & Releases</span>
-        </a>
-
-        <a
-          href="https://marketplace.visualstudio.com/items?itemName=MonsieurDev.nxpress"
-          target="_blank"
-          rel="noreferrer"
-          className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl text-xs font-medium text-(--text-secondary) hover:text-(--text-primary) hover:bg-(--bg-secondary) transition-colors"
-        >
-          <div className="w-5 h-5 rounded-md bg-purple-500/10 text-purple-500 flex items-center justify-center">
-            <Layers className="w-3 h-3" />
-          </div>
-          <span>VS Code Extension</span>
-        </a>
-
-        <a
-          href="https://github.com/D3R50N/nxpress/issues"
-          target="_blank"
-          rel="noreferrer"
-          className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl text-xs font-medium text-(--text-secondary) hover:text-(--text-primary) hover:bg-(--bg-secondary) transition-colors"
-        >
-          <div className="w-5 h-5 rounded-md bg-cyan-500/10 text-cyan-500 flex items-center justify-center">
-            <MessageSquare className="w-3 h-3" />
-          </div>
-          <span>Community</span>
-        </a>
       </div>
 
       {/* Structured Navigation Groups */}
@@ -157,7 +100,7 @@ export function Sidebar({
 
               {/* Subsections list */}
               {!isCollapsed && (
-                <div className="space-y-0.5 mt-1">
+                <div className="space-y-0.5 mt-0.5 pl-2 border-l border-(--border-color) ml-2">
                   {filteredSubs.map((sub) => {
                     const isActiveSub =
                       (isActiveSec && activeSubId === sub.id) ||
@@ -170,18 +113,13 @@ export function Sidebar({
                           onSelectSection(sec.id, sub.id);
                           onCloseMobile();
                         }}
-                        className={`w-full text-left px-3 py-1.5 rounded-xl text-xs transition-all cursor-pointer flex items-center justify-between gap-2 ${
+                        className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs transition-all cursor-pointer truncate ${
                           isActiveSub
-                            ? "bg-(--pill-active-bg) text-(--pill-active-text) font-semibold shadow-xs"
+                            ? "bg-(--pill-active-bg) text-(--pill-active-text) font-semibold"
                             : "text-(--text-secondary) hover:text-(--text-primary) hover:bg-(--bg-secondary)"
                         }`}
                       >
-                        <span className="truncate">{sub.title}</span>
-                        {isActiveSub && (
-                          <span className="shrink-0 text-[10px] font-mono font-normal px-1.5 py-0.2 rounded-full bg-blue-600 text-white">
-                            Active
-                          </span>
-                        )}
+                        {sub.title}
                       </button>
                     );
                   })}
@@ -197,7 +135,7 @@ export function Sidebar({
   return (
     <>
       {/* Desktop Fixed Sidebar */}
-      <aside className="hidden lg:block w-64 shrink-0 border-r border-(--border-color) bg-(--bg-primary) h-[calc(100vh-8rem)] sticky top-28 overflow-hidden">
+      <aside className="hidden lg:block w-64 shrink-0 border-r border-(--border-color) bg-(--bg-primary) h-[calc(100vh-4rem)] sticky top-14 overflow-hidden">
         {content}
       </aside>
 

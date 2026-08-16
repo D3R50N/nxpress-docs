@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { Header } from "@/components/Header";
-import { SubHeader } from "@/components/SubHeader";
 import { Sidebar } from "@/components/Sidebar";
 import { RightSidebar } from "@/components/RightSidebar";
 import { CodeBlock } from "@/components/CodeBlock";
@@ -10,16 +9,9 @@ import { PackageManagerSelector } from "@/components/PackageManagerSelector";
 import { SearchModal } from "@/components/SearchModal";
 import { DOCS_DATA } from "@/app/docs-content";
 import {
-  Terminal,
-  Shield,
-  FileCode,
-  Layers,
   ChevronRight,
   Code2,
   ExternalLink,
-  Play,
-  Sparkles,
-  Zap,
 } from "lucide-react";
 
 export default function HomePage() {
@@ -51,7 +43,7 @@ export default function HomePage() {
           }
         }
         setTimeout(() => {
-          const yOffset = -100;
+          const yOffset = -70;
           const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
           window.scrollTo({ top: y, behavior: "auto" });
         }, 100);
@@ -61,7 +53,7 @@ export default function HomePage() {
     // IntersectionObserver scrollspy
     const observerOptions = {
       root: null,
-      rootMargin: "-120px 0px -60% 0px",
+      rootMargin: "-100px 0px -60% 0px",
       threshold: 0,
     };
 
@@ -118,7 +110,7 @@ export default function HomePage() {
 
     const element = document.getElementById(targetId);
     if (element) {
-      const yOffset = -100;
+      const yOffset = -70;
       const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
@@ -157,12 +149,6 @@ export default function HomePage() {
         activeVersion="v1.3.8"
       />
 
-      {/* SubHeader / Breadcrumb & Status bar */}
-      <SubHeader
-        currentSectionTitle={currentSection?.title}
-        currentSubTitle={currentSub?.title}
-      />
-
       {/* Main 3-Column Workspace Layout */}
       <div className="flex-1 flex w-full max-w-[1600px] mx-auto relative">
         {/* Left Sidebar */}
@@ -177,14 +163,10 @@ export default function HomePage() {
         />
 
         {/* Center Main Content */}
-        <main className="flex-1 min-w-0 p-4 sm:p-6 md:p-8 lg:p-10 space-y-12">
-          {/* Hero Banner Video / Visual Card */}
-          <div className="relative rounded-2xl md:rounded-3xl overflow-hidden bg-[#161b22] text-white p-6 sm:p-8 border border-slate-700/60 shadow-xs">
+        <main className="flex-1 min-w-0 p-4 sm:p-6 md:p-8 lg:p-10 space-y-10">
+          {/* Hero Banner Visual Card */}
+          <div className="relative rounded-2xl overflow-hidden bg-[#161b22] text-white p-6 sm:p-8 border border-slate-800 shadow-xs">
             <div className="relative z-10 max-w-2xl space-y-3">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/15 border border-blue-400/25 text-blue-400 text-xs font-semibold">
-                <Zap className="w-3.5 h-3.5" />
-                <span>Nxpress Framework v1.3.8 Released</span>
-              </div>
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
                 Modern File-Based Routing for Express.js
               </h1>
@@ -214,18 +196,13 @@ export default function HomePage() {
 
           {/* Quick Install Package Manager Tabs Widget */}
             <div className="rounded-2xl border border-(--border-color) bg-(--bg-card) p-5 sm:p-6 shadow-xs space-y-3">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-sm sm:text-base font-bold text-(--text-primary)">
-                    Quick Installation
-                  </h3>
-                  <p className="text-xs text-(--text-secondary)">
-                    Scaffold a new project in seconds with your preferred package manager.
-                  </p>
-                </div>
-                <span className="text-[11px] font-mono font-medium px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                  Recommended: pnpm
-                </span>
+              <div>
+                <h3 className="text-sm sm:text-base font-bold text-(--text-primary)">
+                  Quick Installation
+                </h3>
+                <p className="text-xs text-(--text-secondary)">
+                  Scaffold a new project in seconds with your preferred package manager.
+                </p>
               </div>
 
               <PackageManagerSelector
