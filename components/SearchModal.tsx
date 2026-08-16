@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Search, X, ChevronRight, FileText } from "lucide-react";
 import { DOCS_DATA, DocSection, DocSubsection } from "@/app/docs-content";
 
 interface SearchModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelectSection: (sectionId: string, subId?: string) => void;
 }
 
 interface SearchResultItem {
@@ -15,7 +15,8 @@ interface SearchResultItem {
   subsection: DocSubsection | null;
 }
 
-export function SearchModal({ isOpen, onClose, onSelectSection }: SearchModalProps) {
+export function SearchModal({ isOpen, onClose }: SearchModalProps) {
+  const router = useRouter();
   const [query, setQuery] = useState("");
 
   useEffect(() => {
@@ -47,6 +48,12 @@ export function SearchModal({ isOpen, onClose, onSelectSection }: SearchModalPro
     });
     return results;
   });
+
+  const handleSelect = (sectionId: string, subId?: string) => {
+    onClose();
+    const targetUrl = `/docs/${sectionId}${subId ? `#${subId}` : ""}`;
+    router.push(targetUrl);
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 px-4 bg-black/80 backdrop-blur-xs">
@@ -85,10 +92,7 @@ export function SearchModal({ isOpen, onClose, onSelectSection }: SearchModalPro
               {filtered.map(({ section, subsection }, idx) => (
                 <button
                   key={`${section.id}-${subsection ? subsection.id : 'main'}-${idx}`}
-                  onClick={() => {
-                    onSelectSection(section.id, subsection ? subsection.id : undefined);
-                    onClose();
-                  }}
+                  onClick={() => handleSelect(section.id, subsection?.id)}
                   className="w-full text-left p-3 rounded-lg hover:bg-(--bg-secondary) border border-transparent hover:border-(--border-color) transition-all flex items-center justify-between group cursor-pointer"
                 >
                   <div className="flex items-start gap-3">

@@ -1,37 +1,38 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { DOCS_DATA } from "@/app/docs-content";
 import {
   Search,
   ChevronDown,
   ChevronRight,
-  BookOpen,
 } from "lucide-react";
 
 interface SidebarProps {
-  activeSectionId: string;
-  activeSubId?: string;
-  onSelectSection: (sectionId: string, subId?: string) => void;
   isOpenMobile: boolean;
   onCloseMobile: () => void;
   filterQuery: string;
   onFilterChange: (query: string) => void;
+  activeSubId?: string;
 }
 
 export function Sidebar({
-  activeSectionId,
-  activeSubId,
-  onSelectSection,
   isOpenMobile,
   onCloseMobile,
   filterQuery,
   onFilterChange,
+  activeSubId,
 }: SidebarProps) {
+  const pathname = usePathname();
+  const currentSlug = pathname.replace("/docs/", "").replace("/docs", "") || DOCS_DATA[0].id;
+
   const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
 
   const toggleSectionCollapse = (secId: string, e: React.MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     setCollapsedSections((prev) => ({
       ...prev,
       [secId]: !prev[secId],
@@ -56,7 +57,7 @@ export function Sidebar({
       <nav className="space-y-4 px-1 flex-1">
         {DOCS_DATA.map((sec) => {
           const isCollapsed = !!collapsedSections[sec.id];
-          const isActiveSec = activeSectionId === sec.id;
+          const isActiveSec = currentSlug === sec.id;
 
           const filteredSubs = filterQuery
             ? sec.subsections.filter(
@@ -72,20 +73,20 @@ export function Sidebar({
 
           return (
             <div key={sec.id} className="space-y-1">
-              {/* Group Header */}
-              <div
-                onClick={() => {
-                  onSelectSection(sec.id, sec.subsections[0]?.id);
-                  onCloseMobile();
-                }}
-                className="w-full flex items-center justify-between px-2.5 py-1 text-xs font-semibold text-(--text-primary) hover:text-blue-600 transition-colors cursor-pointer group"
-              >
-                <div className="flex items-center gap-2 truncate">
+              {/* Group Header Link */}
+              <div className="w-full flex items-center justify-between px-2.5 py-1 text-xs font-semibold text-(--text-primary) hover:text-blue-600 transition-colors group">
+                <Link
+                  href={`/docs/${sec.id}`}
+                  onClick={onCloseMobile}
+                  className={`flex items-center gap-2 truncate flex-1 ${
+                    isActiveSec ? "text-blue-600 dark:text-blue-400 font-bold" : ""
+                  }`}
+                >
                   <span className="text-[11px] font-mono text-(--text-muted) group-hover:text-blue-500">
                     {sec.number}
                   </span>
                   <span className="truncate">{sec.title}</span>
-                </div>
+                </Link>
                 <button
                   onClick={(e) => toggleSectionCollapse(sec.id, e)}
                   className="p-0.5 rounded text-(--text-muted) hover:text-(--text-primary) transition-transform"
@@ -102,25 +103,23 @@ export function Sidebar({
               {!isCollapsed && (
                 <div className="space-y-0.5 mt-0.5 pl-2 border-l border-(--border-color) ml-2">
                   {filteredSubs.map((sub) => {
-                    const isActiveSub =
-                      (isActiveSec && activeSubId === sub.id) ||
-                      (!activeSubId && isActiveSec && sec.subsections[0]?.id === sub.id);
+                    const isCurrentSubActive = isActiveSec && activeSubId === sub.id;
 
                     return (
-                      <button
+                      <Link
                         key={sub.id}
-                        onClick={() => {
-                          onSelectSection(sec.id, sub.id);
-                          onCloseMobile();
-                        }}
-                        className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs transition-all cursor-pointer truncate ${
-                          isActiveSub
+                        href={`/docs/${sec.id}#${sub.id}`}
+                        onClick={onCloseMobile}
+                        className={`w-full text-left block px-2.5 py-1.5 rounded-lg text-xs transition-all truncate ${
+                          isCurrentSubActive
                             ? "bg-(--pill-active-bg) text-(--pill-active-text) font-semibold"
-                            : "text-(--text-secondary) hover:text-(--text-primary) hover:bg-(--bg-secondary)"
+                            : isActiveSec
+                            ? "text-(--text-secondary) hover:text-(--text-primary) hover:bg-(--bg-secondary)"
+                            : "text-(--text-muted) hover:text-(--text-primary) hover:bg-(--bg-secondary)"
                         }`}
                       >
                         {sub.title}
-                      </button>
+                      </Link>
                     );
                   })}
                 </div>
@@ -135,7 +134,7 @@ export function Sidebar({
   return (
     <>
       {/* Desktop Fixed Sidebar */}
-      <aside className="hidden lg:block w-64 shrink-0 border-r border-(--border-color) bg-(--bg-primary) h-[calc(100vh-4rem)] sticky top-14 overflow-hidden">
+      <aside className="hidden lg:block w-64 shrink-0 border-r border-(--border-color) bg-(--bg-primary) h-[calc(100vh-3.5rem)] sticky top-14 overflow-hidden">
         {content}
       </aside>
 
