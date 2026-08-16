@@ -142,12 +142,12 @@ export function DocPageContent({
         <main className="flex-1 min-w-0 p-4 sm:p-6 md:p-8 lg:p-10 space-y-10">
           {/* Overview Hero Card on First Page */}
           {isOverview && (
-            <div className="relative rounded-2xl overflow-hidden bg-[#161b22] text-white p-6 sm:p-8 border border-slate-800 shadow-xs">
+            <div className="relative rounded-2xl overflow-hidden border border-(--border-strong) bg-(--bg-secondary) p-6 sm:p-8 shadow-xs transition-colors">
               <div className="relative z-10 max-w-2xl space-y-3">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-(--text-primary)">
                   Modern File-Based Routing for Express.js
                 </h1>
-                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                <p className="text-xs sm:text-sm text-(--text-secondary) leading-relaxed">
                   Next-generation developer experience combining Express performance, intuitive template engines, cascading middlewares, and zero-config API routes.
                 </p>
                 <div className="pt-2 flex flex-wrap items-center gap-3">
@@ -162,7 +162,7 @@ export function DocPageContent({
                     href="https://marketplace.visualstudio.com/items?itemName=MonsieurDev.nxpress"
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-medium border border-slate-700 transition-all"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-(--border-strong) bg-(--bg-primary) hover:bg-(--bg-card) text-(--text-primary) text-xs font-medium transition-all"
                   >
                     <Code2 className="w-4 h-4" />
                     <span>VS Code Extension</span>
