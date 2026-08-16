@@ -459,12 +459,14 @@ export async function GET(req: Request, res: Response) {
 export async function POST(req: Request, res: Response) {
   const { name, email } = req.body;
   if (!name || !email) {
-    return res.status(400).json({ error: 'Name and email are required' });
+    res.status(400);
+    return { error: 'Name and email are required' };
   }
 
   const newUser = { id: Date.now(), name, email };
   mockUsers.push(newUser);
-  return res.status(201).json(newUser);
+  res.status(201);
+  return newUser;
 }`
           },
           {
@@ -479,7 +481,8 @@ export async function GET(req: Request, res: Response) {
   const user = mockUsers.find(u => u.id === userId);
 
   if (!user) {
-    return res.status(404).json({ error: 'User not found' });
+    res.status(404);
+    return { error: 'User not found' };
   }
   return user;
 }
@@ -491,7 +494,8 @@ export async function PUT(req: Request, res: Response) {
   const user = mockUsers.find(u => u.id === userId);
 
   if (!user) {
-    return res.status(404).json({ error: 'User not found' });
+    res.status(404);
+    return { error: 'User not found' };
   }
   user.name = name ?? user.name;
   user.email = email ?? user.email;
@@ -872,12 +876,12 @@ export default async function props(req: Request, res: Response) {
           {
             title: "app/api/users/index.ts (List & Create)",
             language: "typescript",
-            code: `import type { Request, Response } from '@nxpress/core';\n\nconst mockUsers = [\n  { id: 1, name: 'Alice', email: 'alice@example.com' },\n  { id: 2, name: 'Bob', email: 'bob@example.com' }\n];\n\n// GET /api/users -> Automatically responds with 200 OK + JSON\nexport async function GET(req: Request, res: Response) {\n  const search = req.query.search as string;\n  if (search) {\n    return mockUsers.filter(u => u.name.toLowerCase().includes(search.toLowerCase()));\n  }\n  return mockUsers;\n}\n\n// POST /api/users -> Creates new record with 201 Created\nexport async function POST(req: Request, res: Response) {\n  const { name, email } = req.body;\n  if (!name || !email) {\n    return res.status(400).json({ error: 'Name and email are required' });\n  }\n  \n  const newUser = { id: Date.now(), name, email };\n  mockUsers.push(newUser);\n  \n  return res.status(201).json(newUser);\n}`
+            code: `import type { Request, Response } from '@nxpress/core';\n\nexport const mockUsers = [\n  { id: 1, name: 'Alice', email: 'alice@example.com' },\n  { id: 2, name: 'Bob', email: 'bob@example.com' }\n];\n\n// GET /api/users -> Automatically responds with 200 OK + JSON\nexport async function GET(req: Request, res: Response) {\n  const search = req.query.search as string;\n  if (search) {\n    return mockUsers.filter(u => u.name.toLowerCase().includes(search.toLowerCase()));\n  }\n  return mockUsers;\n}\n\n// POST /api/users -> Creates new record with 201 Created\nexport async function POST(req: Request, res: Response) {\n  const { name, email } = req.body;\n  if (!name || !email) {\n    res.status(400);\n    return { error: 'Name and email are required' };\n  }\n  \n  const newUser = { id: Date.now(), name, email };\n  mockUsers.push(newUser);\n  \n  res.status(201);\n  return newUser;\n}`
           },
           {
             title: "app/api/users/[id].ts (Get, Update, Delete by ID)",
             language: "typescript",
-            code: `import type { Request, Response } from '@nxpress/core';\n\n// GET /api/users/:id\nexport async function GET(req: Request, res: Response) {\n  const userId = Number(req.params.id);\n  const user = { id: userId, name: 'Alice', email: 'alice@example.com' };\n  \n  if (!user) {\n    return res.status(404).json({ error: 'User not found' });\n  }\n  return user;\n}\n\n// PUT /api/users/:id\nexport async function PUT(req: Request, res: Response) {\n  const userId = Number(req.params.id);\n  const { name, email } = req.body;\n  return { id: userId, name, email, updatedAt: new Date().toISOString() };\n}\n\n// DELETE /api/users/:id\nexport async function DELETE(req: Request, res: Response) {\n  return res.status(204).send();\n}`
+            code: `import type { Request, Response } from '@nxpress/core';\nimport { mockUsers } from '.';\n\n// GET /api/users/:id\nexport async function GET(req: Request, res: Response) {\n  const userId = Number(req.params.id);\n  const user = mockUsers.find(u => u.id === userId);\n  \n  if (!user) {\n    res.status(404);\n    return { error: 'User not found' };\n  }\n  return user;\n}\n\n// PUT /api/users/:id\nexport async function PUT(req: Request, res: Response) {\n  const userId = Number(req.params.id);\n  const { name, email } = req.body;\n  const user = mockUsers.find(u => u.id === userId);\n  \n  if (!user) {\n    res.status(404);\n    return { error: 'User not found' };\n  }\n  user.name = name ?? user.name;\n  user.email = email ?? user.email;\n  return { ...user, updatedAt: new Date().toISOString() };\n}\n\n// DELETE /api/users/:id\nexport async function DELETE(req: Request, res: Response) {\n  const userId = Number(req.params.id);\n  const index = mockUsers.findIndex(u => u.id === userId);\n  \n  if (index !== -1) {\n    mockUsers.splice(index, 1);\n  }\n  return res.status(204).send();\n}`
           }
         ]
       }
