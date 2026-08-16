@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
 :root {
-  --canvas-bg: #e2e8f0;
   --bg-primary: #ffffff;
   --bg-secondary: #f8fafc;
   --bg-card: #ffffff;
@@ -20,22 +19,21 @@
 }
 
 .dark {
-  --canvas-bg: #090a0f;
-  --bg-primary: #12141a;
-  --bg-secondary: #181b24;
-  --bg-card: #151821;
-  --bg-code: #0d1117;
+  --bg-primary: #0d1117;
+  --bg-secondary: #161b22;
+  --bg-card: #161b22;
+  --bg-code: #090d13;
   --code-text: #e6edf3;
-  --text-primary: #f8fafc;
-  --text-secondary: #cbd5e1;
-  --text-muted: #64748b;
-  --border-color: #1e222d;
-  --border-strong: #2a303f;
-  --accent-color: #60a5fa;
-  --accent-contrast: #0f172a;
-  --accent-light: #1e293b;
-  --pill-active-bg: #1e293b;
-  --pill-active-text: #93c5fd;
+  --text-primary: #f0f6fc;
+  --text-secondary: #8b949e;
+  --text-muted: #6e7681;
+  --border-color: #21262d;
+  --border-strong: #30363d;
+  --accent-color: #58a6ff;
+  --accent-contrast: #0d1117;
+  --accent-light: #1f293d;
+  --pill-active-bg: #1f293d;
+  --pill-active-text: #58a6ff;
 }
 
 html {
@@ -43,24 +41,10 @@ html {
 }
 
 body {
-  background-color: var(--canvas-bg);
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(14, 165, 233, 0.15) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(20, 184, 166, 0.12) 0px, transparent 50%);
-  background-attachment: fixed;
+  background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
   min-height: 100vh;
-}
-
-.dark body {
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(14, 165, 233, 0.1) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(20, 184, 166, 0.08) 0px, transparent 50%);
 }
 
 /* Custom scrollbar */
@@ -79,7 +63,7 @@ body {
 }
 
 .dark ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #30363d;
 }
 
 /* Code block typography & syntax */

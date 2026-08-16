@@ -18,10 +18,10 @@ export function SubHeader({ currentSectionTitle = "Getting Started", currentSubT
       <div className="flex items-center gap-2.5 overflow-hidden">
         {/* Workspace Avatars Badge */}
         <div className="flex -space-x-1.5 items-center shrink-0">
-          <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 text-[9px] font-bold text-white flex items-center justify-center ring-2 ring-(--bg-primary)">
+          <div className="w-5 h-5 rounded-full bg-blue-600 text-[9px] font-bold text-white flex items-center justify-center ring-2 ring-(--bg-primary)">
             NX
           </div>
-          <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-400 text-[9px] font-bold text-white flex items-center justify-center ring-2 ring-(--bg-primary)">
+          <div className="w-5 h-5 rounded-full bg-emerald-600 text-[9px] font-bold text-white flex items-center justify-center ring-2 ring-(--bg-primary)">
             JS
           </div>
         </div>

@@ -141,7 +141,7 @@ export default function HomePage() {
   const currentSub = currentSection?.subsections.find((s) => s.id === activeSubId);
 
   return (
-    <div className="min-h-screen p-2 sm:p-4 md:p-6 lg:p-8 flex flex-col justify-start">
+    <div className="min-h-screen flex flex-col w-full bg-(--bg-primary) text-(--text-primary)">
       {/* Search Modal */}
       <SearchModal
         isOpen={isSearchOpen}
@@ -149,73 +149,70 @@ export default function HomePage() {
         onSelectSection={handleSelectSection}
       />
 
-      {/* Main Floating App-Card Container */}
-      <div className="w-full max-w-[1520px] mx-auto rounded-[24px] sm:rounded-[32px] md:rounded-[36px] bg-(--bg-primary) border border-(--border-strong) shadow-2xl shadow-black/10 dark:shadow-black/60 overflow-hidden flex flex-col flex-1">
-        {/* Top Header */}
-        <Header
-          onOpenSearch={() => setIsSearchOpen(true)}
-          isMobileMenuOpen={isMobileMenuOpen}
-          onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          activeVersion="v1.3.8"
+      {/* Top Header */}
+      <Header
+        onOpenSearch={() => setIsSearchOpen(true)}
+        isMobileMenuOpen={isMobileMenuOpen}
+        onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        activeVersion="v1.3.8"
+      />
+
+      {/* SubHeader / Breadcrumb & Status bar */}
+      <SubHeader
+        currentSectionTitle={currentSection?.title}
+        currentSubTitle={currentSub?.title}
+      />
+
+      {/* Main 3-Column Workspace Layout */}
+      <div className="flex-1 flex w-full max-w-[1600px] mx-auto relative">
+        {/* Left Sidebar */}
+        <Sidebar
+          activeSectionId={activeSectionId}
+          activeSubId={activeSubId}
+          onSelectSection={handleSelectSection}
+          isOpenMobile={isMobileMenuOpen}
+          onCloseMobile={() => setIsMobileMenuOpen(false)}
+          filterQuery={filterQuery}
+          onFilterChange={setFilterQuery}
         />
 
-        {/* SubHeader / Breadcrumb & Status bar */}
-        <SubHeader
-          currentSectionTitle={currentSection?.title}
-          currentSubTitle={currentSub?.title}
-        />
-
-        {/* Main 3-Column Workspace Layout */}
-        <div className="flex-1 flex w-full relative">
-          {/* Left Sidebar */}
-          <Sidebar
-            activeSectionId={activeSectionId}
-            activeSubId={activeSubId}
-            onSelectSection={handleSelectSection}
-            isOpenMobile={isMobileMenuOpen}
-            onCloseMobile={() => setIsMobileMenuOpen(false)}
-            filterQuery={filterQuery}
-            onFilterChange={setFilterQuery}
-          />
-
-          {/* Center Main Content */}
-          <main className="flex-1 min-w-0 p-4 sm:p-6 md:p-8 lg:p-10 space-y-12">
-            {/* Hero Banner Video / Visual Card */}
-            <div className="relative rounded-2xl md:rounded-3xl overflow-hidden bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white p-6 sm:p-8 border border-slate-700/60 shadow-lg">
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.3),transparent_70%)]" />
-              <div className="relative z-10 max-w-2xl space-y-3">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-semibold">
-                  <Zap className="w-3.5 h-3.5 text-blue-400" />
-                  <span>Nxpress Framework v1.3.8 Released</span>
-                </div>
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
-                  Modern File-Based Routing for Express.js
-                </h1>
-                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                  Next-generation developer experience combining Express performance, intuitive template engines, cascading middlewares, and zero-config API routes.
-                </p>
-                <div className="pt-2 flex flex-wrap items-center gap-3">
-                  <a
-                    href="#getting-started"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-md transition-all"
-                  >
-                    <span>Get Started</span>
-                    <ChevronRight className="w-4 h-4" />
-                  </a>
-                  <a
-                    href="https://marketplace.visualstudio.com/items?itemName=MonsieurDev.nxpress"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-medium backdrop-blur-xs border border-white/10 transition-all"
-                  >
-                    <Code2 className="w-4 h-4" />
-                    <span>VS Code Extension</span>
-                  </a>
-                </div>
+        {/* Center Main Content */}
+        <main className="flex-1 min-w-0 p-4 sm:p-6 md:p-8 lg:p-10 space-y-12">
+          {/* Hero Banner Video / Visual Card */}
+          <div className="relative rounded-2xl md:rounded-3xl overflow-hidden bg-[#161b22] text-white p-6 sm:p-8 border border-slate-700/60 shadow-xs">
+            <div className="relative z-10 max-w-2xl space-y-3">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/15 border border-blue-400/25 text-blue-400 text-xs font-semibold">
+                <Zap className="w-3.5 h-3.5" />
+                <span>Nxpress Framework v1.3.8 Released</span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
+                Modern File-Based Routing for Express.js
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                Next-generation developer experience combining Express performance, intuitive template engines, cascading middlewares, and zero-config API routes.
+              </p>
+              <div className="pt-2 flex flex-wrap items-center gap-3">
+                <a
+                  href="#getting-started"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition-all"
+                >
+                  <span>Get Started</span>
+                  <ChevronRight className="w-4 h-4" />
+                </a>
+                <a
+                  href="https://marketplace.visualstudio.com/items?itemName=MonsieurDev.nxpress"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-medium border border-slate-700 transition-all"
+                >
+                  <Code2 className="w-4 h-4" />
+                  <span>VS Code Extension</span>
+                </a>
               </div>
             </div>
+          </div>
 
-            {/* Quick Install Package Manager Tabs Widget */}
+          {/* Quick Install Package Manager Tabs Widget */}
             <div className="rounded-2xl border border-(--border-color) bg-(--bg-card) p-5 sm:p-6 shadow-xs space-y-3">
               <div className="flex items-center justify-between">
                 <div>
@@ -407,6 +404,5 @@ export default function HomePage() {
           </div>
         </footer>
       </div>
-    </div>
   );
 }

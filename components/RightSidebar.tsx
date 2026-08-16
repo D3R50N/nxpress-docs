@@ -91,7 +91,7 @@ export function RightSidebar({
         </div>
 
         {/* Thumbnail Preview Banner */}
-        <div className="relative rounded-xl overflow-hidden bg-gradient-to-tr from-slate-900 via-blue-950 to-indigo-900 text-white p-3 aspect-video flex flex-col justify-between group cursor-pointer">
+        <div className="relative rounded-xl overflow-hidden bg-slate-900 dark:bg-slate-800 text-white p-3 aspect-video flex flex-col justify-between group cursor-pointer border border-slate-700/50">
           <div className="flex items-center justify-between text-[10px] font-mono opacity-80">
             <span>NXPRESS TUTORIAL</span>
             <span className="px-1.5 py-0.5 rounded bg-white/20 text-[9px]">5 min</span>
