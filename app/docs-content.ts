@@ -73,7 +73,7 @@ export const DOCS_DATA: DocSection[] = [
           {
             title: "Option 1: Nxpress CLI",
             language: "bash",
-            code: "# Start development server with Hot Reload, route scanning, & Tailwind\nnxpress dev\n# or shortcut\nnxp dev\n\n# List all generated application and API routes\nnxpress routes\n\n# Start production server\nnxpress start\n\n# Generate static HTML export (SSG) to out/\nnxpress export"
+            code: "# Start development server with Hot Reload, route scanning, & Tailwind\nnxpress dev\n# or shortcut\nnxp dev\n\n# List all generated routes (inspect endpoints, methods, files & debug routing bugs)\nnxpress routes\n\n# Start production server\nnxpress start\n\n# Generate static HTML export (SSG) to out/\nnxpress export"
           },
           {
             title: "Option 2: Custom server.ts Entrypoint",
