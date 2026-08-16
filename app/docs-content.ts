@@ -39,6 +39,33 @@ export const DOCS_DATA: DocSection[] = [
     summary: "Nxpress is an Express.js-based framework for Node.js providing file-based routing, template components, cascading middlewares, automatic response handling, and built-in template helpers.",
     subsections: [
       {
+        id: "project-scaffolding",
+        title: "Project Scaffolding (create-nxpress-app)",
+        description: "Scaffold a new ready-to-run Nxpress project interactively or with automated flags.",
+        codeSnippets: [
+          {
+            title: "Quick Start",
+            language: "bash",
+            code: "# Interactive wizard\npnpm create nxpress-app my-app\n# or\nnpx create-nxpress-app my-app\n\n# Bypass prompts with defaults (-y / --yes)\npnpm create nxpress-app my-app -y\n\n# Scaffold API-only project without template views (--api)\npnpm create nxpress-app my-api -y --api"
+          }
+        ],
+        table: {
+          headers: ["Option / Flag", "Description", "Default"],
+          rows: [
+            ["-y, --yes", "Skip interactive prompts and use defaults", "false"],
+            ["--api", "Scaffold API-only project with users and health routes", "false"],
+            ["-e, --engine <engine>", "Template engine (ejs, handlebars, nunjucks, liquid, html)", "ejs"],
+            ["-p, --port <number>", "HTTP server port number", "3000"],
+            ["--tailwind", "Include Tailwind CSS v4 support", "true"],
+            ["-m, --minimal", "Create minimal project without views or components", "false"],
+            ["--app-dir <dir>", "Routes directory name", "app"],
+            ["--components-dir <dir>", "Components directory name", "components"],
+            ["--public-dir <dir>", "Static public assets directory name", "public"],
+            ["--pkg-manager <pm>", "Package manager (pnpm, npm, yarn, bun, deno)", "pnpm"]
+          ]
+        }
+      },
+      {
         id: "starting-server",
         title: "Starting the Server",
         description: "You can start your Nxpress application in two ways: via the Nxpress CLI or through a custom server.ts entrypoint.",
