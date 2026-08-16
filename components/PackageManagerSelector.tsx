@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Copy, Check, Terminal } from "lucide-react";
+import { Copy, Check } from "lucide-react";
 
 type PkgManager = "pnpm" | "npm" | "yarn" | "bun";
 
@@ -49,29 +49,29 @@ export function PackageManagerSelector({
           >
             {pkg}
             {selectedPkg === pkg && (
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 rounded-full" />
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400 rounded-full" />
             )}
           </button>
         ))}
       </div>
 
       {/* Terminal Code Pill / Block */}
-      <div className="relative flex items-center justify-between rounded-2xl bg-[#1c2333] px-5 py-3.5 text-white font-mono text-xs sm:text-sm shadow-md border border-slate-700/50">
+      <div className="relative flex items-center justify-between rounded-2xl border border-(--border-code) bg-(--bg-code) px-5 py-3.5 text-(--code-text) font-mono text-xs sm:text-sm shadow-xs transition-colors">
         <div className="flex items-center gap-3 overflow-x-auto">
-          <span className="text-slate-400 select-none">$</span>
-          <span className="text-emerald-400">{selectedPkg}</span>
-          <span className="text-slate-200">{activeCmd.replace(selectedPkg, "").trim()}</span>
+          <span className="text-(--text-muted) select-none">$</span>
+          <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{selectedPkg}</span>
+          <span className="text-(--text-primary)">{activeCmd.replace(selectedPkg, "").trim()}</span>
         </div>
 
         <button
           onClick={handleCopy}
-          className="ml-3 shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 text-xs transition-colors cursor-pointer"
+          className="ml-3 shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-lg border border-(--border-strong) bg-(--bg-primary) text-(--text-secondary) hover:text-(--text-primary) hover:bg-(--bg-secondary) text-xs transition-colors cursor-pointer"
           aria-label="Copy install command"
         >
           {copied ? (
             <>
-              <Check className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-[11px] text-emerald-400">Copied</span>
+              <Check className="w-3.5 h-3.5 text-emerald-500" />
+              <span className="text-[11px] text-emerald-500">Copied</span>
             </>
           ) : (
             <>

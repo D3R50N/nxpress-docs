@@ -46,28 +46,28 @@ export function CodeBlock({ title, language = "typescript", code }: CodeBlockPro
   };
 
   return (
-    <div className="my-4 rounded-2xl border border-slate-800/80 bg-[#1c2333] text-slate-100 overflow-hidden font-mono text-xs sm:text-sm shadow-md">
+    <div className="my-4 rounded-2xl border border-(--border-code) bg-(--bg-code) text-(--code-text) overflow-hidden font-mono text-xs sm:text-sm shadow-xs transition-colors">
       {(title || language) && (
-        <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-800 bg-[#151b28] text-slate-400 text-xs">
+        <div className="flex items-center justify-between px-4 py-2.5 border-b border-(--border-code) bg-(--bg-code-header) text-(--text-muted) text-xs">
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1.5 opacity-60">
-              <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
-              <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
-              <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
+              <div className="w-2.5 h-2.5 rounded-full bg-red-400/80" />
+              <div className="w-2.5 h-2.5 rounded-full bg-amber-400/80" />
+              <div className="w-2.5 h-2.5 rounded-full bg-emerald-400/80" />
             </div>
-            <span className="font-semibold text-slate-300 font-mono text-[11px] ml-1">
+            <span className="font-semibold text-(--text-secondary) font-mono text-[11px] ml-1">
               {title || language}
             </span>
           </div>
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-300 transition-colors cursor-pointer text-xs"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-(--border-strong) bg-(--bg-primary) text-(--text-secondary) hover:text-(--text-primary) hover:bg-(--bg-secondary) transition-colors cursor-pointer text-xs"
             aria-label="Copy code"
           >
             {copied ? (
               <>
-                <Check className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="text-[11px] text-emerald-400">Copied</span>
+                <Check className="w-3.5 h-3.5 text-emerald-500" />
+                <span className="text-[11px] text-emerald-500">Copied</span>
               </>
             ) : (
               <>
@@ -82,11 +82,11 @@ export function CodeBlock({ title, language = "typescript", code }: CodeBlockPro
         {!title && !language && (
           <button
             onClick={handleCopy}
-            className="absolute top-3 right-3 z-10 flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-300 transition-colors cursor-pointer text-xs"
+            className="absolute top-3 right-3 z-10 flex items-center gap-1 px-2.5 py-1 rounded-lg border border-(--border-strong) bg-(--bg-primary) text-(--text-secondary) hover:text-(--text-primary) hover:bg-(--bg-secondary) transition-colors cursor-pointer text-xs"
             aria-label="Copy code"
           >
             {copied ? (
-              <Check className="w-3.5 h-3.5 text-emerald-400" />
+              <Check className="w-3.5 h-3.5 text-emerald-500" />
             ) : (
               <Copy className="w-3.5 h-3.5" />
             )}
